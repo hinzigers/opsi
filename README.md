@@ -10,6 +10,9 @@ Here some example.
 
 | OPSI Product        | Description           |
 |:-------------:|:-------------:|
-| [Pale Moon](https://github.com/hinzigers/opsi/tree/master/palemoon)      | Browser (GECKO) |
-| [Java](https://github.com/hinzigers/opsi/tree/master/java)      | Java 8u40      |
+| [7zip](https://github.com/hinzigers/opsi/tree/master/7zip)      | Packer |
+| [Acrobat Reader](https://github.com/hinzigers/opsi/tree/master/acrobatreader)     | PDF Reader      |
 | [Adobe Flash Player](https://github.com/hinzigers/opsi/tree/master/adobe-flashplayer) | obsolet      |
+| [IPv6 disabled](https://github.com/hinzigers/opsi/tree/master/ipv6_diabled) | IPv6 switching off      |
+| [Java](https://github.com/hinzigers/opsi/tree/master/java)      | Java 8u40      |
+| [Pale Moon](https://github.com/hinzigers/opsi/tree/master/palemoon)      | Browser (GECKO) |
