@@ -1,0 +1,84 @@
+;=============================================================================
+; HELP:            Oliver Schuetz <http://oppserver.net>
+; FILE:            java_install.ins
+; USAGE:
+; DESCRIPTION:     installscript for opsiproduct oracle java
+;
+; OPTION:
+; REQUIREMENTS:    Winst Version 4.11
+; BUGS:
+; NOTES:
+;
+; AUTHOR:          Marco Hinz
+; COMPANY:         Justice
+; VERSION:         1.0
+; CREATED:         12.03.2015
+; REVISION:
+; MAINTAINER:      Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+Message = Java wird installiert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+
+[Actions]
+
+DefVar $OS$
+set $OS$ = GetOS
+
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+
+DefVar $SystemType$
+Set $SystemType$ = GetSystemType
+
+DefVar $ProductName$
+Set $ProductName$ = "Java 8"
+
+DefVar $ProductNameFull1$
+set $ProductNameFull1$ = "Java 1.8 Update 40"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "Java_Duke_learning.png"
+
+DefVar $Executable$
+DefVar $CONTAINER32$
+DefVar $CONTAINER64$
+Set $Executable$ = "jre1.8.0_40.msi"
+Set $CONTAINER32$ = "jre1.8.0_40"
+Set $CONTAINER64$ = "jre1.8.0_40_x64"
+
+DefVar $ExitCode$
+
+requiredWinstVersion >= "4.11"
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+Message "Installiere "+$ProductNameFull1$
+
+if not (HasMinimumSpace ("%SYSTEMDRIVE%", "100 MB"))
+     LogError "Nicht genuegend Platz auf %SYSTEMDRIVE%"
+     isFatalError
+endif
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" OR $NTVersion$ = "Windows Vista" )
+    if $SystemType$ = "x86 System"
+	    Winbatch_Install_32-Bit
+    endif
+    if $SystemType$ = "64 Bit System"
+    	Winbatch_Install_64-Bit
+    	Winbatch_Install_32-Bit
+    endif
+else
+	LogError "Kein kompatibles Betriebssystem installiert"
+	isFatalError
+endif
+
+[Winbatch_Install_32-Bit]
+msiexec /i "%SCRIPTPATH%\files\$CONTAINER32$\$Executable$" /norestart /qb-! IEXPLORER=1 OPERA=1 MOZILLA=1 FIREFOX=1 JAVAUPDATE=0 SYSTRAY=0 JU=0 AUTOUPDATECHECK=0
+
+[Winbatch_Install_64-Bit]
+msiexec /i "%SCRIPTPATH%\files\$CONTAINER64$\$Executable$" /norestart /qb-! IEXPLORER=1 OPERA=1 MOZILLA=1 FIREFOX=1 JAVAUPDATE=0 SYSTRAY=0 JU=0 AUTOUPDATECHECK=0

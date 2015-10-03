@@ -1,0 +1,23 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: 7zip920
+name: 7-Zip920
+description: 7-Zip Packer 32 und 64 Bit
+advice: 7-Zip
+version: 9.20
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: install.ins
+uninstallScript: uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+

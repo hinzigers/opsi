@@ -1,0 +1,10 @@
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/" xmlns:os="http://a9.com/-/spec/opensearch/1.1/">
+<os:ShortName>openpdf</os:ShortName>
+<os:Description>PDF Search Engine</os:Description>
+<os:InputEncoding>UTF-8</os:InputEncoding>
+<os:Image width="16" height="16">data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD9/f0B8vL9HcTE+2GDg/mld3f4tnd3+LaDg/mlxMT7YfHx/Rz9/f0A////AP///wD///8A////AP///wD6+v0Jvr77ZHFx+Nqfn/v93d39//n5/v/5+f7/3d39/5+f+/1wcPjawcH7Yfr6/Qn///8A////AP///wD6+v0Jqqr6foeH+vXx8f7/////////////////////////////////8PD+/4aG+vWsrPt7+vr9Cf///wD9/f0Bvr77ZIeH+vX5+f7////////////////////////////////////////////5+f7/hob69cHB+2H9/f0A8vL9HXBw+Nrw8P7/1NT9/+jo/v////////////////////////////////////////////Dw/v9wcPjZ8vL9GcTE+2Gfn/v9+/v+/1JS+P+iovv/+Pj+////////////8vL+//7+/v//////////////////////np77/cTE+2GDg/mlXV34/4eH+v9MTPj/OTn3/zU19/+4uPv/q6v7/y0t9/9LS/f/WFj4/9DQ/f9LS/j/6+v+/9zc/f+Dg/mldnb4tsHB/P/Jyfz/TEz4/5ub+/+QkPr/UVH4/0pK+P+Njfr/oKD7/0FB9//Kyvz/MzP3/+np/v/4+P7/dnb4tnd3+Lb5+f7/+/v+/0xM+P+QkPr/hob6/1FR+P9WVvj/d3f5/56e+/9BQff/xMT8/zEx9//f3/3/+Pj+/3Z2+LaDg/ml3d39//z8/v99ffn/YWH5/0FB9/+3t/z/0dH9/0RE+P84OPf/QUH3/39/+v8WFvb/cXH5/9XV/f+Dg/mlxMT7YZ+f+/3/////////////////////////////////////ra37/01N+P/f3/3/Pz/3/2pq+f+Pj/r9xMT7YfHx/RxwcPja8PD+/////////////////////////////////+7u/v/b2/3//v7+/+Pj/f/Dw/z/bW341/Ly/Rn9/f0AwcH7YYaG+vX5+f7////////////////////////////////////////////4+P7/hYX69cHB+2H9/f0A////APr6/QmsrPt7hob69fDw/v/////////////////////////////////w8P7/hYX69ays+3v6+v0J////AP///wD///8A+vr9CcHB+2FwcPjZnp77/dzc/f/4+P7/+Pj+/9zc/f+envv9cXH418HB+2H6+v0J////AP///wD///8A////AP///wD9/f0A8vL9GcTE+2GDg/mldnb4tnZ2+LaDg/mlxMT7YfLy/Rn9/f0A////AP///wD///8A/D8AAPAPAADgBwAAwAMAAIABAACAAQAAAAAAAAAAAAAAAAAAAAAAAIABAACAAQAAwAMAAOAHAADwDwAA/D8AAA==</os:Image>
+<SearchForm>http://openpdf.info/</SearchForm>
+<os:Url type="text/html" method="POST" template="http://openpdf.info/ebook">
+  <os:Param name="r" value="{searchTerms}"/>
+</os:Url>
+</SearchPlugin>

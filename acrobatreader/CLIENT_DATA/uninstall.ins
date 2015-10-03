@@ -1,0 +1,23 @@
+[Initial]
+Message=Deinstalliere Acrobat Reader ...
+ 
+;Set Loglevel
+setLogLevel = 6
+
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+ 
+[Actions]
+DefVar $ProductName$
+Set $ProductName$ = "Acrobat Reader XI"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "icon.bmp"
+
+DefVar $ExitCode$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+
+sub "%ScriptPath%\SubUninstall.ins"

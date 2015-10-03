@@ -1,0 +1,36 @@
+; Copyright (c) uib gmbh (www.uib.de) 
+; This sourcecode is owned by uib gmbh 
+; and published under the Terms of the General Public License. 
+; credits: http://www.opsi.org/en/credits/ 
+
+[Initial]
+; Script edit 04.10.2014 (Marco Hinz)
+Message = 7-Zip wird deinstalliert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+
+StayOnTop = true
+
+DefVar $Executable1$
+Set $Executable1$ = "7z920.msi"
+
+[Actions]
+DefVar $OS$
+Set $OS$ = GetOS
+
+DefVar $NTVersion$
+Set $NTVersion$ = GetNTVersion
+
+DefVar $ProductName$
+Set $ProductName$ = "7-Zip"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "7zip-icon.png"
+
+DefVar $ExitCode$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+
+sub "%ScriptPath%\SubUninstall.ins"

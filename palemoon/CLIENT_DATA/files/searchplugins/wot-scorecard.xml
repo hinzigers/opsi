@@ -1,0 +1,9 @@
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/" xmlns:os="http://a9.com/-/spec/opensearch/1.1/">
+<os:ShortName>WOT Scorecard</os:ShortName>
+<os:Description>Sie wissen nicht das eine Seite sicher ist? Dann suchen sie mit mir!</os:Description>
+<os:InputEncoding>UTF-8</os:InputEncoding>
+<os:Image width="16" height="16">data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9cLFQoWIPmZAEIAAALzSURBVDjLrVN5SFRxEJ5dV03xRLo0MTugTMFqK31v1dKMMtd2dT1SOt0wNTpIOklF17RL3TZDywM1zQ412iQVtGizttwuooMiCYQOcglKEzP9+j0pM6j+auAx8+B93zfzzTxCvn0mevPnB7qQnNUgFgEu5CrUTz/qfU09Vb73emrn0d9CAMMsLRkB9UjR0ny6Xcg7W+TQPYpAnonHIVMQSp/FobF7S33b29xxvxEIyiPg4TZ8G/oKIaccd0V4CSH8AiHyEkHZyOo6Qly9M3I6eVR3Rbv+6qDAAYKiAP75CO/Id4Aqi7CGgddfJ6jvEuJbCRFnbZF2fSoqX4e5j47wrvfJc0F58EcHMVr2cQNBtobuSJeTXhpO4NWsmwpGZmD5nCMSLkx7NkLwrbfIX1DcX+YF5gWijhKuvHAbEMYaO6qfnD4vjCWsyGck7QRF9XTIS+dYk+D21dY92NpiAWGc9VcJMUdonbCdsQScgiL8lYRFiQTVWcLqRmcoKnziydz/SnPtTS7UHcyoNEKSiZDykJxaqj0luHU0pO/GYTGvIgkXSeM5RuC/gbAkm3nTZIPIKm8NGbrqc1rfZGDDTUJ0LSPoJCTfowUnTLOsXhpSLX52IEugAD6KPnEbCX67CGubrRFV5d1NxR3pvrfNWqQYGcFlwiYj9afcp12pD8hu8x2ReFmeyDJwOznLtpCRj6UBPokQxDpI0DtCWelTPsKuMyYi47E9opvYrptoMNlEferb4m2KWusZywolM5Zm0xlZIlNfR8P8DkKoToS4i+4YNSiy3EeT1TkbG5kPq84TQsokwyvP2A2qGqwQUmD5gd8t+cLWOMRtZavNlEBZ4zCsqvHq/u0ig7TuZnmNHWL17PLYBQafsgBX6AjugA1kqQy4k8Cli7FY54SYupn4438RrPMwcMcmwk9jD/90K3D7xJDtF4FnqtxBW/CFLggr9gT9K0JPesxdcmLKxYDjk94HascjUDsBMiEXTf4SfNJtL/3v+A55tY9pGIKmSwAAAABJRU5ErkJggg==</os:Image>
+<os:Url type="text/html" method="GET" template="http://www.mywot.com/de/scorecard/{searchTerms}">
+</os:Url><os:Url type="application/opensearchdescription+xml" method="GET" template="http://www.mywot.com/de/" rel="self">
+</os:Url>
+</SearchPlugin>

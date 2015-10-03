@@ -1,0 +1,141 @@
+;=============================================================================
+; HELP:             Oliver Schuetz <http://oppserver.net>
+; FILE:             flash_subuninstall.ins
+; USAGE:
+; DESCRIPTION:      uninstallscript for opsiproduct adobe flash player
+;
+; OPTION:		
+; REQUIREMENTS:     Winst Version 4.11
+; BUGS:             !uninstall for IEx and !x64
+; NOTES:
+; 
+; AUTHOR:           Marco Hinz
+; COMPANY:          Justice
+; VERSION:          1.5
+; CREATED:          16.03.2013
+; REVISION:         ... 11.03.2015
+; MAINTAINER:       Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+DefVar $UninstallCommand$
+DefVar $DisplayName$
+
+;=============================================================================
+; 64 Bit OS
+;if GetSystemType = "64 Bit System"
+;  Adobe Flash ActiveX 16.0.0.305 64-Bit uninstall when located
+;  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}] DisplayName")
+;  if not ($DisplayName$ = "")
+;      set $UninstallCommand$ = "MsiExec.exe /x {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} /qb-! REBOOT=ReallySuppress"
+;  endif
+
+;  Adobe Flash Plugin 16.0.0.305 64-Bit uninstall when located
+;  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{1D55DE93-486D-40F7-88F3-CF08578F82AA}] DisplayName")
+;  if not ($DisplayName$ = "")
+;      set $UninstallCommand$ = "MsiExec.exe /x {1D55DE93-486D-40F7-88F3-CF08578F82AA} /qb-! REBOOT=ReallySuppress"
+;  endif
+
+;  64 Bit versions not uninstall
+;  Adobe Flash Plugin uninstall
+;  Message "Deinstalliere "+$ProductName$+" Plugin 64 Bit"
+;  set $UninstallCommand$ = "MsiExec.exe /uninstall %SCRIPTPATH%\files\"+$Executable1$+" /quiet reboot=reallysuppress"
+;  Winbatch_Uninstall
+
+;  Adobe Flash ActiveX uninstall
+;  Message "Deinstalliere "+$ProductName$+" ActiveX 64 Bit"
+;  set $UninstallCommand$ = "MsiExec.exe /uninstall %SCRIPTPATH%\files\"+$Executable2$+" /quiet reboot=reallysuppress"
+;  Winbatch_Uninstall
+;endif
+
+;=============================================================================
+
+; 32 Bit OS and FlashPlayer 16
+if GetSystemType =  "x86 System"
+  ;Adobe Flash Plugin/NPAPI 16.0.0.235 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{61F2FFE4-56BA-4F5E-91FB-BD34F92E44CE}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {61F2FFE4-56BA-4F5E-91FB-BD34F92E44CE} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Active X 16.0.0.235 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{B21D5938-6B90-408B-B827-92F6E0E11B48}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {B21D5938-6B90-408B-B827-92F6E0E11B48} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Plugin/NPAPI 16.0.0.257 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{DC0C27E6-745B-4D0E-A2F7-47676BFAE25D}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {DC0C27E6-745B-4D0E-A2F7-47676BFAE25D} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Active X 16.0.0.257 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{70F97130-DBF6-4885-854C-CC7A80FC65E1}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {70F97130-DBF6-4885-854C-CC7A80FC65E1} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Plugin/NPAPI 16.0.0.296 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A37E9FA0-00FE-479D-9F62-E6E3DBA51D29}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {A37E9FA0-00FE-479D-9F62-E6E3DBA51D29} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Active X 16.0.0.296 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{465571A6-29A2-4D39-B77D-3A1F6C964B65}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {465571A6-29A2-4D39-B77D-3A1F6C964B65} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Plugin/NPAPI 16.0.0.305 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{1D55DE93-486D-40F7-88F3-CF08578F82AA}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {1D55DE93-486D-40F7-88F3-CF08578F82AA} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  ;Adobe Flash Active X 16.0.0.305 32-Bit uninstall when located
+;  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}] DisplayName")
+;  if not ($DisplayName$ = "")
+;      set $UninstallCommand$ = "MsiExec.exe /x {xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx} /qb-! REBOOT=ReallySuppress"
+;  endif
+
+; 32 Bit OS and FlashPlayer 17
+  ;Adobe Flash Plugin/NPAPI 17.0.0.134 32-Bit uninstall when located
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{F22C3C05-B1D9-47FF-AA17-4F9DCBFE850F}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {F22C3C05-B1D9-47FF-AA17-4F9DCBFE850F} /qb-! REBOOT=ReallySuppress"
+  endif
+
+
+;=========================================Adobe Flash Plugin uninstall===========================================
+  ;Message "Deinstalliere "+$ProductName$+" Plugin 32 Bit"
+  ;set $UninstallCommand$ = "MsiExec.exe /uninstall %SCRIPTPATH%\files\"+$Executable1$+" /quiet reboot=reallysuppress"
+  ;Winbatch_Uninstall
+
+;=========================================Adobe Flash ActiveX uninstall==========================================
+;  Message "Deinstalliere "+$ProductName$+" ActiveX 32 Bit"
+;  set $UninstallCommand$ = "MsiExec.exe /uninstall %SCRIPTPATH%\files\"+$Executable2$+" /quiet reboot=reallysuppress"
+;  Winbatch_Uninstall
+endif
+
+Message "Deinstalliere "+$DisplayName$
+Winbatch_Uninstall
+sub "%scriptpath%\check_msi-exitcode.ins"
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" )
+    Files_Delete_AllUsers_WinNT5x /AllNTUserProfiles
+endif
+
+if ( $NTVersion$ = "Windows Vista" )
+    Files_Delete_AllUsers_WinNT6x /AllNTUserProfiles
+endif
+
+[Winbatch_Uninstall]
+$UninstallCommand$
+
+[Files_Delete_AllUsers_WinNT5x]
+delete -sf "%UserProfileDir%\Anwendungsdaten\Macromedia\"
+
+[Files_Delete_AllUsers_WinNT6x]
+delete -sf "%UserProfileDir%\AppData\Roaming\Macromedia\"
+delete -sf "C:\Windows\System32\Macromed\Flash\mms.cfg"

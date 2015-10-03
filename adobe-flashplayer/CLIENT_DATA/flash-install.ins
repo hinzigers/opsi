@@ -1,0 +1,101 @@
+;=============================================================================
+; HELP:              Oliver Schuetz <http://oppserver.net>
+; FILE:              flash_install.ins
+; USAGE:
+; DESCRIPTION:       installscript for opsiproduct adobe flash player
+;
+; OPTION:		
+; REQUIREMENTS:      Winst Version 4.11
+; BUGS:              !install for IEx
+; NOTES:
+; 
+; AUTHOR:            Marco Hinz
+; COMPANY:           Justice
+; VERSION:           1.6
+; CREATED:           16.03.2013
+; REVISION:          ... 11.03.2015, 15.03.2015
+; MAINTAINER:        Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+Message = FlashPlayer wird installiert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = true
+
+
+[Actions]
+DefVar $OS$
+set $OS$ = GetOS
+
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+
+DefVar $SystemType$
+Set $SystemType$ = GetSystemType
+
+DefVar $TempDir$
+Set $TempDir$ = "C:\tmp"
+
+DefVar $ProductName$
+Set $ProductName$ = "Adobe Flash 17"
+
+DefVar $ProductNameFull1$
+set $ProductNameFull1$ = "Adobe Flash 17.0.0.134 Plugin"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "icon.png"
+
+DefVar $Executable1$
+;DefVar $Executable2$
+Set $Executable1$ = "install_flash_player_17_plugin.msi"
+;Set $Executable2$ = "install_flash_player_17_active_x.msi"
+
+DefVar $ExitCode$
+
+requiredWinstVersion >= "4.11"
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+Message "Installiere "+$ProductNameFull1$
+
+if not (HasMinimumSpace ("%SYSTEMDRIVE%", "100 MB"))
+     LogError "Nicht genuegend Platz auf %SYSTEMDRIVE%"
+     isFatalError
+endif
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" OR $NTVersion$ = "Windows Vista" )
+	if $SystemType$ = "x86 System"
+		Files_Copy_WinNT5x
+		Winbatch_Install_32bit
+		sub "%scriptpath%\check_msi-exitcode.ins"
+;		Files_del
+	endif
+	if $SystemType$ = "64 Bit System"
+		Files_Copy_WinNT6x
+		Winbatch_Install_64bit
+		sub "%scriptpath%\check_msi-exitcode.ins"
+;		Files_del
+	endif
+else
+	LogError "Kein kompatibles Betriebssystem installiert"
+	isFatalError
+endif
+
+[Files_Copy_WinNT5x]
+copy -s "%SCRIPTPATH%\files\mms.cfg" C:\Windows\System32\Macromed\Flash
+
+[Files_Copy_WinNT6x]
+;copy -s "%SCRIPTPATH%\files\mms.cfg" "%WINDIR%\SysWow64\Macromed\Flash\."
+copy -s "%SCRIPTPATH%\files\mms.cfg" "C:\Windows\System32\Macromed\Flash\mms.cfg"
+
+[Winbatch_Install_32bit]
+msiexec /i "%SCRIPTPATH%\files\$Executable1$" /qb-! reboot=reallysuppress
+;msiexec /i "%SCRIPTPATH%\files\$Executable2$" /qb-! reboot=reallysuppress
+
+[Winbatch_Install_64bit]
+msiexec /i "%SCRIPTPATH%\files\$Executable1$" /qb-! reboot=reallysuppress
+;msiexec /i "%SCRIPTPATH%\files\$Executable2$" /qb-! reboot=reallysuppress
+
+[Files_del]
+delete "$TempDir$\*.*"

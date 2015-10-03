@@ -1,0 +1,50 @@
+;=============================================================================
+; HELP:             Oliver Schuetz <http://oppserver.net>
+; FILE:             flash_uninstall.ins
+; USAGE:
+; DESCRIPTION:      uninstallscript for opsiproduct adobe flash player
+;
+; OPTION:		
+; REQUIREMENTS:     Winst Version 4.11
+; BUGS:             !install for IEx
+; NOTES:
+; 
+; AUTHOR:           Marco Hinz
+; COMPANY:          Justice
+; VERSION:          1.6
+; CREATED:          16.03.2013
+; REVISION:         ... 11.03.2015, 15.03.2015
+; MAINTAINER:       Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+
+[Initial]
+Message = FlashPlayer wird deinstalliert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = true
+
+DefVar $Executable1$
+;DefVar $Executable2$
+Set $Executable1$ = "install_flash_player_17_plugin.msi"
+;Set $Executable2$ = "install_flash_player_17_active_x.msi"
+
+[Actions]
+DefVar $OS$
+Set $OS$ = GetOS
+
+DefVar $NTVersion$
+Set $NTVersion$ = GetNTVersion
+
+DefVar $ProductName$
+Set $ProductName$ = "Adobe Flash 17"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "icon.png"
+
+DefVar $ExitCode$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+sub "%ScriptPath%\flash_SubUninstall.ins"

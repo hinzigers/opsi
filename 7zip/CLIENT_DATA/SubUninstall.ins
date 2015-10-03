@@ -1,0 +1,21 @@
+DefVar $UninstallCommand$
+
+DefVar $DisplayName$
+
+; 32 Bit OS
+if GetSystemType =  "x86 System"
+  Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{23170F69-40C1-2701-0920-000001000000}] DisplayName")
+  if not ($DisplayName$ = "")
+      set $UninstallCommand$ = "MsiExec.exe /x {23170F69-40C1-2701-0920-000001000000} /qb-! REBOOT=ReallySuppress"
+  endif
+
+  Message "Deinstalliere "+$ProductName$+" 32 Bit"
+  set $UninstallCommand$ = "MsiExec.exe /uninstall %SCRIPTPATH%\files\"+$Executable1$+" /quiet reboot=reallysuppress"
+  Winbatch_Uninstall
+endif
+
+sub "%scriptpath%\check_msi-exitcode.ins"
+
+[Winbatch_Uninstall]
+$UninstallCommand$
+

@@ -1,0 +1,91 @@
+;=============================================================================
+; HELP:              Oliver Schuetz <http://oppserver.net>
+; FILE:              palemoon_delsub.ins
+; USAGE:
+; DESCRIPTION:       installscript for opsiproduct Pale Moon
+;
+; OPTION:		
+; REQUIREMENTS:      Winst Version 4.10.8.6
+; BUGS:              
+; NOTES:             1.0 copy container palemoon portable
+;                    1.1 install Pale Moon win32 installer
+; AUTHOR:            Marco Hinz
+; COMPANY:           Justice
+; VERSION:           1.1
+; CREATED:           23.06.2013
+; REVISION:          18.03.2015
+; MAINTAINER:        Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+; Message at install time:
+Message "Deinstallation von Pale Moon (Mozilla Firefox Derivat)"
+
+; kill a running firefox
+killtask "palemoon.exe"
+
+if FileExists(""+$MozInstallDir$+"\uninstall\helper.exe")
+    set $UninstallCommand$ = ""+$MozInstallDir$+"\uninstall\helper.exe"
+    set $UninstallCommand$ = '"'+$UninstallCommand$+'" /S'
+    WinBatch_start_FirefoxUninstall /WaitSeconds 20
+    sub_check_exitcode
+endif
+
+Registry_delete_current_version
+
+if not ($MozInstallDir$ = "")
+        Files_copy_deinstall
+endif
+
+;if not ($MozLocalDir$ = "")
+;        Files_copy_local_del
+;endif
+
+;if not ($MozRoamingDir$ = "")
+;        Files_copy_roaming_del
+;endif
+
+[WinBatch_start_FirefoxUninstall]
+$UninstallCommand$
+;%SCRIPTPATH%\sleep 5
+
+[Files_copy_deinstall]
+delete -sf "$MozInstallDir$\"
+
+[Files_copy_local_del]
+;delete -sf "$MozLocalDir$\"
+
+[Files_copy_roaming_del]
+;delete -sf "$MozRoamingDir$\"
+
+[Registry_delete_current_version]
+OpenKey [HKEY_LOCAL_MACHINE\Software\Mozilla\Pale Moon]
+set "CurrentVersion" = ""
+
+[sub_check_exitcode]
+comment "test for installation success via exit code"
+set $ExitCode$ = getLastExitCode
+; informations to exit codes see
+; http://msdn.microsoft.com/en-us/library/aa372835(VS.85).aspx
+; http://msdn.microsoft.com/en-us/library/aa368542.aspx
+if ($ExitCode$ = "0")
+        comment "looks good: setup program gives exitcode zero"
+else
+        comment "Setup program gives a exitcode unequal zero: "+$ExitCode$
+        if ($ExitCode$ = "1605")
+                comment "ERROR_UNKNOWN_PRODUCT  1605    This action is only valid for products that are currently installed."
+                comment "Uninstall of a not installed product failed - no problem"
+        else
+                if ($ExitCode$ = "1641")
+                        comment "looks good: setup program gives exitcode 1641"
+                        comment "ERROR_SUCCESS_REBOOT_INITIATED 1641    The installer has initiated a restart. This message is indicative of a success."
+                else
+                        if ($ExitCode$ = "3010")
+                                comment "looks good: setup program gives exitcode 3010"
+                                comment "ERROR_SUCCESS_REBOOT_REQUIRED  3010    A restart is required to complete the install. This message is indicative of a success."
+                        else
+                                logError "Fatal: Setup program gives an unknown exitcode unequal zero: "+$ExitCode$
+                                isFatalError
+                        endif
+                endif
+        endif
+endif

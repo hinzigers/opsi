@@ -1,0 +1,23 @@
+[Package]
+version: 2
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: ipv6_disabled
+name: IPv6-Disabled
+description: disabled IPv6
+advice: 
+version: 1.0.0
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: ipv6_disabled.ins
+uninstallScript: 
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+

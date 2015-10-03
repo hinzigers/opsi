@@ -1,0 +1,24 @@
+[Package]
+version: 2
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: adobeflashplayer1600296
+name: Adobe Flash Player
+description: Adobe FlashPlayer 16 in 32 und 64 Bit Version
+advice: Adobe Flash Player
+version: 16.0.0.296
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: flash-install.ins
+uninstallScript: flash-uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]

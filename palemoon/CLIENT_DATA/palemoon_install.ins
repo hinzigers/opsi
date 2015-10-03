@@ -1,0 +1,192 @@
+;=============================================================================
+; HELP:              Oliver Schuetz <http://oppserver.net>
+; FILE:              palemoon_install.ins
+; USAGE:
+; DESCRIPTION:       installscript for opsiproduct Pale Moon
+;
+; OPTION:		
+; REQUIREMENTS:      Winst Version 4.11.3.6
+; BUGS:              
+; NOTES:             1.0 copy container palemoon portable
+;                    1.5 install Pale Moon win32 installer with ADD-Ons, search-plugins and certs
+; AUTHOR:            Marco Hinz
+; COMPANY:           Justice
+; VERSION:           1.6
+; CREATED:           23.06.2013
+; REVISION:          18.03.2015, 20.03.2015, 25.03.2015, 25.09.2015
+; MAINTAINER:        Marco Hinz <https://github.com/hinzigers>
+;  + uBlock:         Raymond Hill <https://github.com/gorhill/uBlock>
+;  + uMatrix:        Raymond Hill <https://github.com/gorhill/uMatrix>
+;=============================================================================
+
+[Initial]
+setLogLevel=9
+ExitOnError=false
+ScriptErrorMessages=on
+TraceMode=off
+StayOnTop=false
+
+[Aktionen]
+requiredWinstVersion >= "4.11.3.6"
+DefVar $SYSTEMDRIVE$
+Set $SYSTEMDRIVE$ = "%SYSTEMDRIVE%"
+DefVar $SYSTEMROOT$
+Set $SYSTEMROOT$ = "%SYSTEMROOT%"
+;-------------------------------;
+DefVar $TEMP$
+Set $TEMP$ = EnvVar("TEMP")
+;-------------------------------;
+;DefVar $OS$
+;Set $OS$ = GetOS
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+DefVar $SystemType$
+Set $SystemType$ = GetSystemType
+;-------------------------------;
+DefVar $PRODUCTPATH$
+Set $PRODUCTPATH$ = "%ProgramFilesDir%\Pale Moon"
+;-------------------------------;
+DefVar $InstallDir$
+set $InstallDir$= $PRODUCTPATH$
+;-------------------------------;
+DefVar $NewExe$
+set $NewExe$ = $PRODUCTPATH$+"\"
+;-------------------------------;
+DefVar $MozInstallDir$
+Set $MozInstallDir$ = $PRODUCTPATH$
+;-------------------------------;
+DefVar $AppDataDirName$
+Set $AppDataDirName$ = "AppData"
+;-------------------------------;
+DefVar $UserProfileName$
+DefStringList $UserProfileNames$
+
+DefVar $MozRoamingDir$
+Set $MozRoamingDir$ = "%CurrentAppdataDir%\Roaming\Moonchild Productions"
+;-------------------------------;
+DefVar $ProductId$
+set $ProductId$ = "palemoon"
+;-------------------------------;
+DefVar $FIREFOXVER$
+set $FIREFOXVER$ = "palemoon-25.7.0.win32.installer.exe"
+DefVar $SilentSwitch$
+set $SilentSwitch$ = "-ms"
+;-------------------------------;
+DefVar $UninstallCommand$
+DefVar $ExitCode$
+
+;======================================================================================;
+if not(HasMinimumSpace ("%SYSTEMDRIVE%", "100 MB"))
+	LogError "Nicht gengend Platz auf Laufwerk C:\ Es sind 100 MB auf C:\ erforderlich."
+	isFatalError
+	comment "Bearbeitung beenden und Produktschalter auf failed setzen"
+else
+	comment "show product picture"
+	ShowBitmap /3 "%scriptpath%\Firefox_LiNsta.png" "Pale Moon 25.7.0 DE"
+	if FileExists("%ScriptPath%\palemoon_delsub.ins")
+		Message "Deinstall Pale Moon old version"
+		comment "start palemoon_delsub.ins"
+		sub "%ScriptPath%\palemoon_delsub.ins"
+	endif
+	comment "Message at install time:"
+	Message "Install Pale Moon (Mozilla Firefox Derivat)"
+	comment "Kill laufenden palemoon Task"
+	killtask "palemoon.exe"
+	comment "Eruiere Depotfreigabe..."
+	if not (FileExists("%SCRIPTPATH%"))
+		DosInAnIcon_TryToReconnect
+	endif
+	comment "Starte Pale Moon Installer..."
+	Message "Pale Moon Installation ..."
+
+	if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" OR $NTVersion$ = "Windows Vista" )
+		if $SystemType$ = "x86 System"
+			Message "Copy Pale Moon MSI File to Temp"
+			Files_Copy_files_WinNT6x32bit
+			Message "Start the Installer with Mozilla Silent Switch"
+			Winbatch_palemoon_32bit
+;			sub "%scriptpath%\check_msi-exitcode.ins"
+			if not(FileExists($NewExe$))
+				logError "Fatal: After Installation "+$NewExe$+" not found"
+				isFatalError
+			else
+				Message "Copy all config files."
+				Files_Copy_configs
+				Message "Cleaning Standard Pale Moon Search-Plugins"
+				Files_copy_files_searchplugins_WinNT6x32bit
+				Message "Delete Temp files."
+				Files_del
+			endif
+		endif
+		if $SystemType$ = "64 Bit System"
+			Files_Copy_files_WinNT6x64bit
+			Winbatch_palemoon_64bit
+			sub "%scriptpath%\check_msi-exitcode.ins"
+;			Files_del
+		endif
+	else
+		LogError "No OS found."
+		isFatalError
+	endif
+;	comment "Kill laufenden palemoon Task"
+;	killtask "palemoon.exe"
+endif
+
+Set $UserProfileNames$ = getOutStreamFromSection('DosInAnIcon_list_profiledir')
+for $entry$ in $UserProfileNames$ do Sub_update_user_profile
+
+[Files_del]
+delete -f "c:\tmp\$FIREFOXVER$"
+
+[Winbatch_palemoon_32bit]
+; see http://wiki.mozilla.org/Installer:Command_Line_Arguments
+"c:\tmp\$FIREFOXVER$" $SilentSwitch$
+
+[Winbatch_palemoon_64bit]
+;null
+
+[DosInAnIcon_list_profiledir]
+@echo off
+dir "%ProfileDir%" /b
+ 
+[Files_Copy_roaming]
+copy -s "%SCRIPTPATH%\files\roaming\Moonchild Productions\Pale Moon\" "%ProfileDir%\$UserProfileName$\$AppDataDirName$\Roaming\Moonchild Productions\Pale Moon\"
+
+[Sub_update_user_profile]
+Set $UserProfileName$ = "$entry$"
+if not ($UserProfileName$ = "") and not ($UserProfileName$ = "All Users") and not ($UserProfileName$ = "Public")
+        if FileExists("%ProfileDir%\" + $UserProfileName$ + "\" + $AppDataDirName$ + "\Roaming\Moonchild Productions\Pale Moon\Profiles\profiles.ini")
+              comment "palemoon user profile exist for user " + $UserProfileName$ + ", leaving as is"
+        else
+		Message "Copy the assimilated profile part to Roaming (DE)"
+		comment "Copy the new Pale Moon Hack (uBlock, uMatrix XPIs n Certs)."
+		Files_Copy_roaming
+;		Message "Kopiere Zertifikate"
+;		Files_copy_files_cert_WinNT6x32bit
+        endif
+endif
+
+[DosInAnIcon_TryToReconnect]
+net use
+set TIMEOUT=
+:TRY
+    if exist "%SCRIPTPATH%\." goto READY
+    %ScriptDrive%
+    set TIMEOUT=%TIMEOUT%1
+    if %TIMEOUT% == 1111111111111111 goto READY
+    sleep 1
+    net use
+    goto TRY
+:READY
+
+[Files_Copy_files_WinNT6x32bit]
+copy "%SCRIPTPATH%\files\$FIREFOXVER$" c:\tmp
+
+[Files_Copy_configs]
+copy "%scriptpath%\files\mozilla.cfg" $MozInstallDir$
+copy "%scriptpath%\files\local_settings.js" $MozInstallDir$\defaults\pref
+
+[Files_copy_files_searchplugins_WinNT6x32bit]
+delete -f "$MozInstallDir$\browser\searchplugins\*"
+copy -s "%scriptpath%\files\searchplugins\" "$MozInstallDir$\browser\searchplugins"
+

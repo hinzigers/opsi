@@ -1,0 +1,40 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: acrobatreader11012
+name: Adobe Acrobat Reader XI
+description: PDF Reader
+advice: Adobe Acrobat Reader
+version: 11.0.12
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: install.ins
+uninstallScript: uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+acrobatreader (11.0.06-1) testing; urgency=low
+
+  * New upstream package
+
+ -- Marco Hinz <admin@localhost>  Sat, 23 Feb 2013 10:16:09 +0100
+
+
+
+
+
+
+
+
+
+
+

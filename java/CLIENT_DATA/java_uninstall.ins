@@ -1,0 +1,143 @@
+;=============================================================================
+; HELP:                     Oliver Schuetz <http://oppserver.net>
+; FILE:                     java_uninstall.ins
+; USAGE:
+; DESCRIPTION:              uninstallscript for opsiproduct oracle java
+;
+; OPTION:
+; REQUIREMENTS:             Winst Version 4.11
+; BUGS:
+;
+; AUTHOR:                   Marco Hinz
+; COMPANY:                  Justice
+; VERSION:                  1.0
+; CREATED:                  12.03.2015
+; REVISION:
+; MAINTAINER:               Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+Message = Deinstalliere Java
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+
+[Actions]
+DefVar $OS$
+Set $OS$ = GetOS
+
+DefVar $NTVersion$
+Set $NTVersion$ = GetNTVersion
+
+DefVar $ProductName$
+Set $ProductName$ = "Java"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "Java_Duke_learning.png"
+
+DefVar $ExitCode$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+
+DefVar $UninstallCommand$
+DefVar $DisplayName$
+
+;Stingliste for the different Versions of Java
+DefStringList $version18_x86$
+DefStringList $version18_x64$
+
+set $version18_x86$ = createStringList ('25','31','40')
+set $version18_x64$ = createStringList ('25','31','40')
+
+
+killtask "java.exe"
+killtask "javaw.exe"
+killtask "jqs.exe"
+
+for $x$ in $version18_x86$ do sub_patch_uninstall_18_0_25_x86
+for $x$ in $version18_x64$ do sub_patch_uninstall_18_0_25_x64
+for $x$ in $version18_x86$ do sub_patch_uninstall_18_0_31_x86
+for $x$ in $version18_x64$ do sub_patch_uninstall_18_0_31_x64
+for $x$ in $version18_x86$ do sub_patch_uninstall_18_0_40_x86
+for $x$ in $version18_x64$ do sub_patch_uninstall_18_0_40_x64
+
+[sub_patch_uninstall_18_0_25_x86]
+;Java 1.8.0.25 uninstall
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218025F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F83218025F0} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+
+[sub_patch_uninstall_18_0_25_x64]
+;Java 1.8.0.25 uninstall
+Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218025F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F03217067FF} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+
+[sub_patch_uninstall_18_0_31_x86]
+;Java 1.8.0.31 uninstall
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218031F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F83218031F0} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+
+[sub_patch_uninstall_18_0_31_x64]
+;Java 1.8.0.31 uninstall
+Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218031F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F83218031F0} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+
+[sub_patch_uninstall_18_0_40_x86]
+;Java 1.8.0.40 uninstall
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218040F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F83218040F0} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\files\check_msi-exitcode.ins"
+endif
+
+[sub_patch_uninstall_18_0_40_x64]
+;Java 1.8.0.40 uninstall
+Set $DisplayName$ = GetRegistrystringvalue64("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F83218040F0}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalling "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {26A24AE4-039D-4CA4-87B4-2F83218040F0} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\files\check_msi-exitcode.ins"
+endif
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" )
+    Files_Delete_AllUsers_WinNT5x /AllNTUserProfiles
+endif
+
+if ( $NTVersion$ = "Windows Vista" )
+    Files_Delete_AllUsers_WinNT6x /AllNTUserProfiles
+endif
+
+
+[Winbatch_Uninstall]
+$UninstallCommand$
+
+[Files_Delete_AllUsers_WinNT5x]
+delete -sf "%UserProfileDir%\Anwendungsdaten\Sun\"
+
+[Files_Delete_AllUsers_WinNT6x]
+delete -sf "%UserProfileDir%\AppData\LocalLow\Sun\"
+delete -sf "%UserProfileDir%\AppData\LocalLow\Oracle\"

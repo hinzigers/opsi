@@ -1,0 +1,24 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: palemoon2570
+name: PaleMoon-25-7-0
+description: Pale Moon Webbrowser (Firefox Derivat)
+advice: Palemoon
+version: 25.7.0
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: palemoon_install.ins
+uninstallScript: palemoon_uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]

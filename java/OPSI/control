@@ -1,0 +1,31 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: java8u40
+name: Java8u40
+description: Java 8u40 fuer 32 und 64 Bit
+advice: Firefox und IExplorer
+version: 1.8.0.40
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: java_install.ins
+uninstallScript: java_uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+java (1.8.0.40-1) testing; urgency=low
+
+  * New upstream package
+  * Initial package
+  * Security update
+
+ -- Marco Hinz <xxxxxxxxxxxxxxxxxxxxx>  Thu, 12 Mar 2015 10:47:27 +0100

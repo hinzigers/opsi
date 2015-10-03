@@ -1,0 +1,159 @@
+[Initial]
+; Script edit by Marco Hinz
+Message=Installiere Acrobat Reader ...
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+ 
+ 
+[Actions]
+DefVar $OS$
+set $OS$ = GetOS
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+
+DefVar $ProductName$
+Set $ProductName$ = "Adobe Reader XI"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "icon.bmp"
+
+DefVar $ExitCode$
+
+DefVar $ProductNameFull1$
+set $ProductNameFull1$ = "Adobe Reader XI 11.0.0"
+DefVar $ProductNameFull2$
+set $ProductNameFull2$ = "Adobe Reader XI 11.0.12"
+DefVar $ProductNameFull3$
+set $ProductNameFull3$ = "Adobe Reader XI 11.0.08"
+
+DefVar $Executable1$
+Set $Executable1$ = "AdbeRdr11000_de_DE.msi"
+DefVar $Executable2$
+Set $Executable2$ = "AdbeRdrUpd11012.msp"
+DefVar $Executable3$
+Set $Executable3$ = "AdbeRdrSecUpd11008.msp"
+
+requiredWinstVersion >= "4.11"
+ 
+
+Message "Installiere "+$ProductNameFull1$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+
+if not (HasMinimumSpace ("%SYSTEMDRIVE%", "500 MB"))
+	LogError "Nicht genuegend Platz auf %SYSTEMDRIVE%"
+	isFatalError
+endif
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" OR $NTVersion$ = "Windows Vista" )
+	Winbatch_Install_Reader
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+	Message "Installiere "+$ProductNameFull2$
+	Winbatch_Install_Update1
+	Message "Installiere "+$ProductNameFull3$
+	Winbatch_Install_Update2
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+	LinkFolder_Custom
+	Registry_Global /32Bit
+	Registry_User /SysNative /AllNTUserdats
+else
+	LogError "Kein kompatibles Betriebssystem installiert"
+	isFatalError
+endif
+
+[Winbatch_Install_Reader]
+msiexec.exe /i "%SCRIPTPATH%\files\$Executable1$" /qb-! /norestart ALLUSERS=1 EULA_ACCEPT=YES SUPPRESS_APP_LAUNCH=NO ENABLE_OPTIMIZATION=NO
+
+[Winbatch_Install_Update1]
+msiexec.exe /p "%SCRIPTPATH%\files\$Executable2$" /qb-!
+
+[Winbatch_Install_Update2]
+msiexec.exe /p "%SCRIPTPATH%\files\$Executable3$" /qb-!
+
+
+[LinkFolder_Custom]
+set_basefolder common_desktopdirectory
+set_subfolder ""
+delete_element "Adobe Reader XI"
+
+set_basefolder common_programs
+set_subfolder ""
+delete_element "Adobe Reader XI"
+set_subfolder ""
+set_link
+name: $ProductName$
+target: "%ProgramFiles32Dir%\Adobe\Reader 11.0\Reader\AcroRd32.exe"
+parameters:
+working_dir: "%ProgramFiles32Dir%\Adobe\Reader 11.0\"
+icon_file:
+icon_index:
+end_link
+ 
+[Registry_Global]
+;Deactivate Adobe Updater
+OpenKey [HKLM\SOFTWARE\Adobe\Adobe ARM\1.0\ARM]
+Set "iCheck"=REG_DWORD:0x00000000
+Set "icheckreader"=REG_DWORD:0x00000000
+ 
+;Avoids start of Reader_sl.exe while booting
+OpenKey [HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run]
+DeleteVar "Adobe Reader Speed Launcher"
+DeleteVar "Adobe ARM"
+DeleteVar "AdobeAAMUpdater-1.0"
+ 
+[Registry_User]
+;Avoids splash-screens during start of the reader
+OpenKey [Software\Adobe\Acrobat Reader\11.0\IPM]
+Set "bShowMsgAtLaunch"=REG_DWORD:0x00000000
+ 
+;Avoid Splash-Screen
+OpenKey [Software\Adobe\Acrobat Reader\11.0\Originals]
+Set "bDisplayAboutDialog"=REG_DWORD:0x00000000
+ 
+;Allow only certified Addons
+OpenKey [Software\Adobe\Acrobat Reader\11.0\Originals]
+Set "iTrustedMode"=REG_DWORD:0x00000001
+ 
+;Set connection-speed to LAN
+OpenKey [Software\Adobe\Acrobat Reader\11.0\AVGeneral]
+Set "iConnectionSpeed"=REG_DWORD:0x00989680
+ 
+;deactivate JavaScript
+OpenKey [Software\Adobe\Acrobat Reader\11.0\JSPrefs]
+Set "bEnableJS" = REG_DWORD:0x00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\AutoSaveDocs]
+set "bAutoSaveDocsEnabled" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\IPM]
+set "bShowMsgAtLaunch" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\JSPrefs]
+set "bEnableJS" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\MeasuringGeo]
+set "iAreaUnit" = REG_DWORD:00000000
+set "iDistUnit" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\Originals]
+set "bDisplayedSplash" = REG_DWORD:00000001
+set "bFullScreenIgnoreTrans" = REG_DWORD:00000001
+set "iPageUnits" = REG_DWORD:00000002
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\Security\cDigSig\cCustomDownload]
+set "bAskBeforeInstalling" = REG_DWORD:00000001
+set "bLoadSettingsFromURL" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\Acrobat Reader\11.0\UsageMeasurement]
+set "bInstalledCleanupCheckDone" = REG_DWORD:00000001
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\CommonFiles\Usage\Reader 11]
+set "OptIn" = REG_DWORD:00000000
+
+openkey [HKEY_CURRENT_USER\Software\Adobe\CommonFiles\Usage\Reader 11\Demographic]
+set "CompanySize" = "NOVALUE"
+set "Industry" = "NOVALUE"
+set "JobFunction" = "NOVALUE"

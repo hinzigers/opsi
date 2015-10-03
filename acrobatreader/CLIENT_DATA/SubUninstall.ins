@@ -1,0 +1,59 @@
+DefVar $UninstallCommand$
+ 
+DefVar $DisplayName$
+ 
+;Deinstalling Adobe Reader 9.3.1 - 9.3.4, if found in the Registry
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{AC76BA86-7AD7-1031-7B44-A93000000001}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalliere "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {AC76BA86-7AD7-1031-7B44-A93000000001} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+ 
+;Deinstalling Adobe Reader 9.4.0, if found in the Registry
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{AC76BA86-7AD7-1031-7B44-A94000000001}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalliere "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {AC76BA86-7AD7-1031-7B44-A94000000001} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+ 
+;Deinstalling Adobe Reader 10.0.x, if found in the Registry
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{AC76BA86-7AD7-1031-7B44-AA0000000001}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalliere "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {AC76BA86-7AD7-1031-7B44-AA0000000001} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+ 
+;Deinstalling Adobe Reader 10.1.x, if found in the Registry
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{AC76BA86-7AD7-1031-7B44-AA1000000001}] DisplayName")
+	if not ($DisplayName$ = "")
+	Message "Deinstalliere "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {AC76BA86-7AD7-1031-7B44-AA1000000001} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+ 
+;Deinstalling Adobe Reader 11.0.x, if found in the Registry
+Set $DisplayName$ = GetRegistrystringvalue32("[HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{AC76BA86-7AD7-1031-7B44-AB0000000001}] DisplayName")
+if not ($DisplayName$ = "")
+	Message "Deinstalliere "+$DisplayName$
+	set $UninstallCommand$ = "MsiExec.exe /x {AC76BA86-7AD7-1031-7B44-AB0000000001} /qb-! REBOOT=ReallySuppress"
+	Winbatch_Uninstall
+	sub "%ScriptDrive%\install\check_exitcode\check_msi-exitcode.ins"
+endif
+
+Linkfolder_Custom
+ 
+[Winbatch_Uninstall]
+$UninstallCommand$
+ 
+[Linkfolder_Custom]
+;Delete Startmenu-Link
+Set_basefolder common_programs
+Set_subfolder ""
+delete_element "$ProductName$"

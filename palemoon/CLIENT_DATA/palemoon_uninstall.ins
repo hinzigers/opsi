@@ -1,0 +1,80 @@
+; Copyright (c) uib gmbh (www.uib.de)
+; This sourcecode is owned by uib gmbh
+; and published under the Terms of the General Public License.
+; credits: http://www.opsi.org/credits/
+
+[Initial]
+Message=Deinstalliere Pale Moon 25.7.0
+setLogLevel=6
+ExitOnError=false
+ScriptErrorMessages=on
+TraceMode=off
+StayOnTop=false
+
+[Actions]
+requiredWinstVersion >= "4.11.3.6"
+
+DefVar $Logo$
+Set $Logo$ = "Firefox_LiNsta"
+DefVar $LogoText$
+Set $LogoText$ = "Pale Moon 25.7.0"
+
+DefVar $UninstallProgram32$
+DefVar $MsiId64$
+DefVar $UninstallProgram64$
+DefVar $LogDir$
+DefVar $ExitCode$
+DefVar $ProductId$
+DefVar $MozInstallDir$
+DefVar $MozInstallDir64$
+DefVar $MozRoamingDir$
+DefVar $MozLocalDir$
+DefVar $LicenseRequired$
+DefVar $LicensePool$
+DefVar $INST_SystemType$
+DefVar $INST_architecture$
+DefVar $UninstallCommand$
+
+Set $INST_SystemType$ = GetSystemType
+set $INST_architecture$ = GetProductProperty("install_architecture","system specific")
+
+Set $LogDir$ = "%SystemDrive%\temp"
+; ----------------------------------------------------------------
+; - Please edit the following values                             -
+; ----------------------------------------------------------------
+Set $ProductId$       	= "palemoon"
+Set $MozInstallDir$		= "%ProgramFilesDir%\Pale Moon"
+Set $MozLocalDir$           = "%CurrentAppdataDir%\Local\Moonchild Productions"
+Set $MozRoamingDir$         = "%CurrentAppdataDir%\Roaming\Moonchild Productions"
+Set $LicenseRequired$ 	= "false"
+Set $LicensePool$     	= "p_" + $ProductId$
+; ----------------------------------------------------------------
+
+comment "Show product picture"
+ShowBitmap "%ScriptPath%\" + $Logo$ + ".png" $LogoText$
+
+Message "Deinstallation von Pale Moon (Mozilla Firefox Derivat)"
+
+if FileExists("%ScriptPath%\palemoon_delsub.ins")
+        comment "Start uninstall sub section"
+        Sub "%ScriptPath%\palemoon_delsub.ins"
+endif
+
+if $LicenseRequired$ = "true"
+        comment "Licensing required, free license used"
+        Sub_free_license
+endif
+
+[Sub_free_license]
+comment "License management is enabled and will be used"
+
+comment "Trying to free license used for the product"
+DefVar $result$
+Set $result$ = FreeLicense($LicensePool$)
+; If there is an assignment of a license pool to the product, it is possible to use
+; Set $result$ = FreeLicense("", $ProductId$)
+;
+; If there is an assignment of a license pool to a windows software id, it is possible to use
+; DefVar $WindowsSoftwareId$
+; $WindowsSoftwareId$ = "..."
+; set $result$ = FreeLicense("", "", $WindowsSoftwareId$)

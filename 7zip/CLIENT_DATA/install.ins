@@ -1,0 +1,75 @@
+; Copyright (c) uib gmbh (www.uib.de)
+; This sourcecode is owned by uib
+; and published under the Terms of the General Public License.
+; credits: http://www.opsi.org/en/credits/
+; http://opsi.disconnected-by-peer.at/opsi/browser/7zip.7zip/CLIENT_DATA/setup3264.ins?rev=37d4a857126e148622ae954bccccae0d0cf25e51
+
+[Initial]
+; Script angepasst am 04.10.2014 von Marco Hinz
+; Dateiquelle_x86="http://dl.7-zip.org/7z920.msi" 
+; Dateiquelle_x64="http://dl.7-zip.org/7z920-x64.msi" 
+
+Message = 7-Zip wird installiert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = true
+
+[Actions]
+DefVar $OS$
+set $OS$ = GetOS
+
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+
+DefVar $SystemType$
+Set $SystemType$ = GetSystemType
+
+DefVar $TempDir$
+Set $TempDir$ = "C:\tmp"
+
+DefVar $ProductName$
+Set $ProductName$ = "7-Zip"
+
+DefVar $ProductNameFull1$
+set $ProductNameFull1$ = "7-Zip 9.20"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "7zip-icon.png"
+
+DefVar $Executable1$
+Set $Executable1$ = "7z920.msi"
+
+DefVar $ExitCode$
+
+requiredWinstVersion >= "4.11"
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+Message "Installiere "+$ProductNameFull1$
+
+if not (HasMinimumSpace ("%SYSTEMDRIVE%", "100 MB"))
+     LogError "Nicht genuegend Platz auf %SYSTEMDRIVE%"
+     isFatalError
+endif
+
+if ( $NTVersion$ = "Win2K" OR $NTVersion$ = "WinXP" OR $NTVersion$ = "Win NT 5.2" OR $NTVersion$ = "Windows Vista" )
+	if $SystemType$ = "x86 System"
+;		Files_Copy_WinNT5x
+		Winbatch_Install_32bit
+		sub "%scriptpath%\check_msi-exitcode.ins"
+;		Files_del
+	endif
+else
+	LogError "Kein kompatibles Betriebssystem installiert"
+	isFatalError
+endif
+
+[Files_Copy_WinNT5x]
+;copy -s "%SCRIPTPATH%\files\mms.cfg" C:\Windows\System32\Macromed\Flash
+
+[Winbatch_Install_32bit]
+msiexec /i "%SCRIPTPATH%\files\$Executable1$" /qb-! reboot=reallysuppress
+
+[Files_del]
+delete "$TempDir$\*.*"
