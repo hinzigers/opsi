@@ -64,7 +64,14 @@ gmx.net ui-portal.de image allow
 google.de * * allow
 google.de * frame inherit
 google.de gstatic.com * inherit
+heise.de * frame inherit
+heise.de cloudfront.net other allow
+heise.de ioam.de * allow
+heise.de ix.de * allow
+heise.de jwpcdn.com * allow
+heise.de jwpltx.com * allow
 heise.de prophet.heise.de image allow
+heise.de vgwort.de * allow
 heise.de vgwort.de image allow
 mail.de mailcdn.de * allow
 sicherheitstacho.de d3js.org script allow

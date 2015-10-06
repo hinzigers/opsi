@@ -1,0 +1,26 @@
+Generated File. Do not edit.
+
+[HEADER]
+Version|0.16|$
+Arch|x86-msvc|$
+
+[PLUGINS]
+NPSWF32_19_0_0_185.dll|$
+C:\Windows\SysWOW64\Macromed\Flash\NPSWF32_19_0_0_185.dll|$
+19.0.0.185|$
+1442938454832|0|0|$
+Shockwave Flash 19.0 r0|$
+Shockwave Flash|$
+2
+0|application/x-shockwave-flash|Adobe Flash movie|swf|$
+1|application/futuresplash|FutureSplash movie|spl|$
+np-vmware-vmrc.dll|$
+C:\Program Files (x86)\Common Files\VMware\VMware Remote Console Plug-in 5.5\Firefox\np-vmware-vmrc.dll|$
+5.5.0.28537|$
+1376730068000|0|0|$
+VMware Remote Console Plug-in|$
+VMware Remote Console Plug-in|$
+1
+0|application/x-vmware-remote-console-2012|VMware Remote Console Plug-in||$
+
+[INVALID]
