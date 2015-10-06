@@ -8,6 +8,7 @@ matrix-off: chrome-extension-scheme true
 matrix-off: chrome-scheme true
 matrix-off: localhost true
 matrix-off: opera-scheme true
+referrer-spoof: t-online.de true
 ua-spoof: * true
 ua-spoof: google.de false
 * * * block
@@ -75,6 +76,11 @@ heise.de vgwort.de * allow
 heise.de vgwort.de image allow
 mail.de mailcdn.de * allow
 sicherheitstacho.de d3js.org script allow
+telekom.com * frame allow
+telekom.com dlvr.t-online.de * inherit
+telekom.com p.t-online.de * inherit
+telekom.com t-online.de * allow
+t-online.de s3-eu-west-1.amazonaws.com * allow
 twitch.tv api.swiftype.com script allow
 twitch.tv jtvnw.net plugin allow
 twitch.tv jtvnw.net script allow
