@@ -1,0 +1,53 @@
+[Package]
+version: 2
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: vlc221
+name: VLC-2-2-1
+description: VLC Media Player 2.2.1
+advice: VLC
+version: 2.2.1
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: vlc_install.ins
+uninstallScript: vlc_uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+vlc (2.2.0-1) testing; urgency=low
+
+  * New upstream package
+
+ -- Marco Hinz <admin@AG-RD-OPSI.jnv.justizsh.de>  19.03.2015
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

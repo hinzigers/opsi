@@ -1,0 +1,175 @@
+;=============================================================================
+; HELP:              Oliver Schuetz <http://oppserver.net>
+; FILE:              vlc_install.ins
+; USAGE:
+; DESCRIPTION:       installscript for opsiproduct VLC Player
+;
+; OPTION:		
+; REQUIREMENTS:      Winst Version 4.10.8.6
+; BUGS:              
+; NOTES:             1.0 install VLC Player 2.2.1up win32 installer
+; 
+; AUTHOR:            Marco Hinz
+; COMPANY:           Justice
+; VERSION:           1.0
+; CREATED:           19.03.2015
+; REVISION:
+; MAINTAINER:        Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+setLogLevel=9
+ExitOnError=false
+ScriptErrorMessages=on
+TraceMode=off
+StayOnTop=false
+
+[Actions]
+requiredWinstVersion >= "4.11.3.6"
+DefVar $SYSTEMDRIVE$
+DefVar $SYSTEMROOT$
+DefVar $TEMP$
+DefVar $OS$
+DefVar $UninstallProgram$
+DefVar $LogDir$
+DefVar $ProductId$
+DefVar $MinimumSpace$
+DefVar $InstallDir$
+DefVar $ExitCode$
+DefVar $LicenseRequired$
+DefVar $LicenseKey$
+DefVar $LicensePool$
+DefVar $INST_SystemType$
+DefVar $INST_architecture$
+DefVar $Version$
+DefVar $Inst_Cmd$
+DefVar $Inst_Prg$
+DefVar $Uninst_Prg$
+DefVar $Uninst_Cmd$
+DefVar $UserProfileName$
+DefStringList $UserProfileNames$
+DefVar $AppDataDirName$
+
+Set $INST_SystemType$ = GetSystemType
+set $INST_architecture$ = GetProductProperty("install_architecture","system specific")
+
+Set $LogDir$ = "%SystemDrive%\tmp"
+
+; ----------------------------------------------------------------
+; - Please edit the following values                             -
+; ----------------------------------------------------------------
+;$ProductId$ should be the name of the product in opsi
+; therefore please: only lower letters, no umlauts,
+; no white space use '-' as a seperator
+Set $ProductId$       = "VLC"
+Set $Version$         = "2.2.1"
+Set $MinimumSpace$    = "25 MB"
+; the path were we find the product after the installation
+Set $InstallDir$      = "%ProgramFiles32Dir%\VideoLAN"
+Set $LicenseRequired$ = "false"
+Set $LicensePool$     = "p_" + $ProductId$
+Set $Inst_Prg$ = "vlc-"+$Version$+"-win32.exe"
+Set $Inst_Cmd$ = ' /L=1031 /S'
+Set $Uninst_Prg$ = "\vlc\uninstall.exe"
+Set $Uninst_Cmd$ = ' /S'
+
+; ----------------------------------------------------------------
+
+Set $SYSTEMDRIVE$ = "%SYSTEMDRIVE%"
+Set $SYSTEMROOT$ = "%SYSTEMROOT%"
+Set $TEMP$ = EnvVar("TEMP")
+Set $OS$ = GetOS
+Set $AppDataDirName$ = "AppData"
+Set $UserProfileNames$ = getOutStreamFromSection('DosInAnIcon_list_profiledir')
+for $entry$ in $UserProfileNames$ do Sub_update_user_profile
+
+if not(HasMinimumSpace ("%SystemDrive%", $MinimumSpace$))
+        LogError "Nicht genug Speicherplatz auf %SystemDrive%, Mind. " + $MinimumSpace$ + " auf %SystemDrive% benoetigt fuer " + $ProductId$
+        isFatalError
+        ; Stop process and set installation status to failed
+else
+        comment "Zeige Produkt Icon"
+        ShowBitmap "%ScriptPath%\" + "Vlc-icon.png" $ProductId$
+ 
+        if FileExists("%ScriptPath%\vlc_delsub.ins")
+                comment "Starte Deinstallations Subsection"
+                Sub "%ScriptPath%\vlc_delsub.ins"
+        endif
+ 
+        if $LicenseRequired$ = "true"
+                comment "Lizenz benoetigt"
+                Sub_get_licensekey
+        endif
+ 
+        comment "installing"
+ 
+        if (($INST_SystemType$ = "x86 System") and ($INST_architecture$ = "system specific")) or ($INST_architecture$ = "both") or ($INST_architecture$ = "32 only")
+                Message "Installiere " + $ProductId$
+                comment "Starte Setup Programm"
+                Winbatch_install
+                Sub_check_exitcode
+        endif
+ 
+        if ($INST_SystemType$ = "64 Bit System") and (($INST_architecture$ = "system specific") or ($INST_architecture$ = "both") or ($INST_architecture$ = "64 only"))
+                Message "Installiere " + $ProductId$
+                comment "Starte Setup Programm"
+                Winbatch_install
+                Sub_check_exitcode
+        endif
+ 
+endif
+
+[Winbatch_install]
+; Choose one of the following examples as basis for your installation
+; You can use $LicenseKey$ var to pass a license key to the installer
+;
+; === Nullsoft Scriptable Install System ================================================================
+ 
+"%ScriptPath%\files\$Inst_Prg$"+$Inst_Cmd$
+ 
+[Sub_check_exitcode]
+comment "Teste auf erfolgreiche Installation durch den exit code"
+set $ExitCode$ = getLastExitCode
+; informations to exit codes see
+; http://msdn.microsoft.com/en-us/library/aa372835(VS.85).aspx
+; http://msdn.microsoft.com/en-us/library/aa368542.aspx
+if ($ExitCode$ = "0")
+        comment "OK: Setup Programm gibt keinen Fehlercode aus"
+else
+        comment "Setup Programm gibt einen Fehlercode aus: " + $ExitCode$
+        if ($ExitCode$ = "1605")
+                comment "ERROR_UNKNOWN_PRODUCT  1605    Diese Aktion ist nur erlaubt fuer zur Zeit installierte Produkte."
+                comment "Deinstallation von nicht installierten Produkten schlug fehl - Kein Problem"
+        else
+                if ($ExitCode$ = "1641")
+                        comment "OK: Setup Programm gibt den exitcode 1641"
+                        comment "ERROR_SUCCESS_REBOOT_INITIATED 1641    Der Installer hat einen Neustart veranlasst."
+                else
+                        if ($ExitCode$ = "3010")
+                                comment "OK: Setup Programm gibt den exitcode 3010"
+                                comment "ERROR_SUCCESS_REBOOT_REQUIRED  3010    Ein Restart ist erforderlich zu Abschluss der Installation."
+                        else
+                                logError "Fatal: Setup Programm beendet mit exitcode: " + $ExitCode$
+                                isFatalError
+                        endif
+                endif
+        endif
+endif
+
+[DosInAnIcon_list_profiledir]
+@echo off
+dir "%ProfileDir%" /b
+ 
+[Files_copy_reg]
+copy -s "%SCRIPTPATH%\files\vlc\*" "%ProfileDir%\$UserProfileName$\$AppDataDirName$\Roaming\vlc\"
+
+[Sub_update_user_profile]
+Set $UserProfileName$ = "$entry$"
+if not ($UserProfileName$ = "") and not ($UserProfileName$ = "All Users")
+        if FileExists("%ProfileDir%\" + $UserProfileName$ + "\" + $AppDataDirName$ + "\Roaming\vlc\vlc-qt-interface.ini")
+              comment "vlc user profile exist for user " + $UserProfileName$ + ", leaving as is"
+              
+        else
+		Files_copy_reg
+        endif
+endif

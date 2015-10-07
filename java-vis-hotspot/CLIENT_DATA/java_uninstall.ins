@@ -1,0 +1,66 @@
+;=============================================================================
+; FILE:                     java_uninstall.ins
+; USAGE:
+; DESCRIPTION:              uninstallscript for opsiproduct oracle java HotSpot
+;
+; OPTION:
+; REQUIREMENTS:             Winst Version 4.11
+; BUGS:
+;
+; AUTHOR:                   Marco Hinz
+; COMPANY:                  Justice
+; VERSION:                  1.0
+; CREATED:                  05.09.2015
+; REVISION:
+; MAINTAINER:               Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+Message = Delete Java HotSpot
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+
+[Actions]
+DefVar $OS$
+Set $OS$ = GetOS
+
+DefVar $NTVersion$
+Set $NTVersion$ = GetNTVersion
+
+DefVar $ProductName$
+Set $ProductName$ = "Java 8 HotSpot"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "Java_Duke_learning.png"
+
+DefVar $SourceDir$
+Set $SourceDir$ = "%SCRIPTPATH%\files\jre1.8.0_60"
+
+DefVar $TargetDir$
+Set $TargetDir$ = "%ProgramFilesDir%\Java\jre1.8.0_60"
+
+DefVar $ExitCode$
+
+ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+
+if FileExists("$TargetDir$")
+    Files_copy_deinstall /WaitSeconds 20
+endif
+
+; delete files of current version
+if not ($TargetDir$ = "")
+    Files_copy_deinstall
+    Registry_UnPatch
+endif
+
+[Files_copy_deinstall]
+delete -sf "$TargetDir$\"
+
+[Registry_UnPatch]
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_60]
+DeleteVar "JavaHome"
+DeleteVar "RuntimeLib"
+DeleteKey [HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_60]

@@ -1,0 +1,62 @@
+Set $UninstallProgram$ = $InstallDir$ + $Uninst_Prg$
+ 
+if (($INST_SystemType$ = "x86 System") and ($INST_architecture$ = "system specific")) or ($INST_architecture$ = "both") or ($INST_architecture$ = "32 only")
+        Message "Deinstalliere " + $ProductId$
+ 
+        if FileExists($UninstallProgram$)
+                comment "Uninstall Programm gefunden, starte Deinstallation"
+                Winbatch_uninstall
+                comment "Loesche "+$InstallDir$
+                Files_uninstall
+                sub_check_exitcode
+        endif
+endif
+ 
+if ($INST_SystemType$ = "64 Bit System") and (($INST_architecture$ = "system specific") or ($INST_architecture$ = "both") or ($INST_architecture$ = "64 only"))
+        Message "Uninstalling " + $ProductId$
+ 
+        if FileExists($UninstallProgram$)
+                comment "Uninstall Programm gefunden, starte Deinstallation"
+                Winbatch_uninstall
+                comment "Loesche "+$InstallDir$
+                Files_uninstall
+                sub_check_exitcode
+        endif
+endif
+ 
+[Winbatch_uninstall]
+"$UninstallProgram$"+$Uninst_Cmd$
+ 
+[Files_uninstall]
+; Example for recursively deleting the installation directory (don't forget the trailing backslash):
+;
+delete -sf "$InstallDir$"
+ 
+[Sub_check_exitcode]
+comment "Teste auf erfolgreiche Installation durch den exit code"
+set $ExitCode$ = getLastExitCode
+; informations to exit codes see
+; http://msdn.microsoft.com/en-us/library/aa372835(VS.85).aspx
+; http://msdn.microsoft.com/en-us/library/aa368542.aspx
+if ($ExitCode$ = "0")
+        comment "OK: Setup Programm gibt keinen Fehlercode aus"
+else
+        comment "Setup Programm gibt einen Fehlercode aus: " + $ExitCode$
+        if ($ExitCode$ = "1605")
+                comment "ERROR_UNKNOWN_PRODUCT  1605    Diese Aktion ist nur erlaubt fuer zur Zeit installierte Produkte."
+                comment "Deinstallation von nicht installierten Produkten schlug fehl - Kein Problem"
+        else
+                if ($ExitCode$ = "1641")
+                        comment "OK: Setup Programm gibt den exitcod 1641"
+                        comment "ERROR_SUCCESS_REBOOT_INITIATED 1641    Der Installer hat einen Neustart veranlasst."
+                else
+                        if ($ExitCode$ = "3010")
+                                comment "OK: Setup Programm gibt den exitcode 3010"
+                                comment "ERROR_SUCCESS_REBOOT_REQUIRED  3010    Ein Restart ist erforderlich zu Abschluss der Installation."
+                        else
+                                logError "Fatal: Setup Programm beendet mit exitcode: " + $ExitCode$
+                                isFatalError
+                        endif
+                endif
+        endif
+endif

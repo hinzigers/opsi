@@ -1,0 +1,134 @@
+;=============================================================================
+; FILE:            java_install.ins
+; USAGE:
+; DESCRIPTION:     installscript for opsiproduct oracle java hotspot for SecSigner
+;
+; OPTION:
+; REQUIREMENTS:    Winst Version 4.11
+; BUGS:
+; NOTES:
+;
+; AUTHOR:          Marco Hinz
+; COMPANY:         Justice
+; VERSION:         1.0
+; CREATED:         05.09.2015
+; REVISION:
+; MAINTAINER:      Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+Message = Java wird installiert
+setLogLevel = 6
+ExitOnError = false
+ScriptErrorMessages = on
+TraceMode = off
+StayOnTop = false
+
+[Actions]
+
+DefVar $OS$
+set $OS$ = GetOS
+
+DefVar $NTVersion$
+set $NTVersion$ = GetNTVersion
+
+DefVar $SystemType$
+Set $SystemType$ = GetSystemType
+
+DefVar $ProductName$
+Set $ProductName$ = "Java 8 HotSpot"
+
+DefVar $ProductNameFull1$
+set $ProductNameFull1$ = "Java 1.8 Update 60 HotSpot"
+
+DefVar $ProductPicture$
+Set $ProductPicture$ = "Java_Duke_learning.png"
+
+DefVar $SourceDir$
+Set $SourceDir$ = "%SCRIPTPATH%\files\jre1.8.0_60\"
+
+DefVar $TargetDir$
+Set $TargetDir$ = "%ProgramFilesDir%\Java\jre1.8.0_60\"
+
+DefVar $ExitCode$
+
+requiredWinstVersion >= "4.11"
+
+
+if not (HasMinimumSpace ("%SYSTEMDRIVE%", "150 MB"))
+     LogError "Nicht genuegend Platz auf %SYSTEMDRIVE%"
+     isFatalError
+     comment "Bearbeitung beenden und Produktschalter auf failed setzen"
+else
+     comment "Zeige Produktbild (show product picture)"
+     ShowBitmap /3 "%scriptpath%\" + $ProductPicture$ $ProductName$
+     Message "Installiere "+$ProductNameFull1$
+     if FileExists("%ScriptPath%\java_uninstall.ins")
+       comment "start java_uninstall.ins"
+       sub "%ScriptPath%\java_uninstall.ins"
+     endif
+     comment "Message at install time:"
+     Message "Kopiere den Java HotSpot Container"
+     comment "check for depotshare"
+     if not (FileExists("%SCRIPTPATH%"))
+       DosInAnIcon_TryToReconnect
+     endif
+     comment "Starte den Kopiervorgang (start copy now)"
+     Files_copy_local
+     sub_check_exitcode
+     Message "Registriere Java HotSpot im System"
+     comment "Registry_Patch running"
+     Registry_Patch
+endif
+
+[Files_copy_local]
+copy -s $SourceDir$ $TargetDir$
+
+[Registry_Patch]
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_60]
+set "JavaHome" = REG_SZ:'C:\Program Files\Java\jre1.8.0_60'
+set "RuntimeLib" = REG_SZ:'C:\Program Files\Java\jre1.8.0_60\bin\client\jvm.dll'
+
+[DosInAnIcon_TryToReconnect]
+net use
+set TIMEOUT=
+:TRY
+    if exist "%SCRIPTPATH%\." goto READY
+    %ScriptDrive%
+    set TIMEOUT=%TIMEOUT%1
+    if %TIMEOUT% == 1111111111111111 goto READY
+    sleep 1
+    net use
+    goto TRY
+:READY
+
+[sub_check_exitcode]
+comment "test for installation success via exit code"
+set $ExitCode$ = getLastExitCode
+; informations to exit codes see
+; http://msdn.microsoft.com/en-us/library/aa372835(VS.85).aspx
+; http://msdn.microsoft.com/en-us/library/aa368542.aspx
+if ($ExitCode$ = "0")
+  comment "looks good: setup program gives exitcode zero"
+  else
+  comment "Setup program gives a exitcode unequal zero: "+$ExitCode$
+  if ($ExitCode$ = "1605")
+     comment "ERROR_UNKNOWN_PRODUCT   1605   This action is only valid for products that are currently installed."
+     comment "Uninstall of a not installed product failed - no problem"
+  else
+     if ($ExitCode$ = "1641")
+        comment "looks good: setup program gives exitcode 1641"
+        comment "ERROR_SUCCESS_REBOOT_INITIATED   1641   The installer has initiated a restart. This message is indicative of a success."
+     else
+        if ($ExitCode$ = "3010")
+           comment "looks good: setup program gives exitcode 3010"
+           comment "ERROR_SUCCESS_REBOOT_REQUIRED   3010   A restart is required to complete the install. This message is indicative of a success."
+        else
+           logError "Fatal: Setup program gives an unknown exitcode unequal zero: "+$ExitCode$
+           isFatalError
+        endif
+     endif
+  endif
+endif
+
+

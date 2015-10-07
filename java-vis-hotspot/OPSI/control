@@ -1,0 +1,86 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: java8u60vishotspot
+name: Java8u60VISHotSpot
+description: Java 8u60 HotSpot Version 32bit
+advice: VIS5 eGrundakte
+version: 1.8.0.60
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: java_install.ins
+uninstallScript: java_uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+java (1.8.0.40-1) testing; urgency=low
+
+  * New upstream package
+
+ -- Marco Hinz <xxxxxxxxxxxxxxxxxxxxx>  Thu, 12 Mar 2015 10:47:27 +0100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

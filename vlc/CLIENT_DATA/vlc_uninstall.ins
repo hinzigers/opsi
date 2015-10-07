@@ -1,0 +1,86 @@
+;=============================================================================
+; HELP:              Oliver Schuetz <http://oppserver.net>
+; FILE:              vlc_uninstall.ins
+; USAGE:
+; DESCRIPTION:       uninstallscript for opsiproduct VLC Player
+;
+; OPTION:		
+; REQUIREMENTS:      Winst Version 4.10.8.6
+; BUGS:              
+; NOTES:             1.0 install VLC Player 2.2.1up win32 installer
+; 
+; AUTHOR:            Marco Hinz
+; COMPANY:           Justice
+; VERSION:           1.0
+; CREATED:           19.03.2015
+; REVISION:
+; MAINTAINER:        Marco Hinz <https://github.com/hinzigers>
+;=============================================================================
+
+[Initial]
+setLogLevel=9
+ExitOnError=false
+ScriptErrorMessages=on
+TraceMode=off
+StayOnTop=false
+ 
+[Actions]
+requiredWinstVersion >= "4.11.3.6"
+ 
+DefVar $UninstallProgram$
+DefVar $LogDir$
+DefVar $ExitCode$
+DefVar $ProductId$
+DefVar $InstallDir$
+DefVar $LicenseRequired$
+DefVar $LicensePool$
+DefVar $INST_SystemType$
+DefVar $INST_architecture$
+DefVar $Uninst_Cmd$
+DefVar $Uninst_Prg$
+ 
+Set $INST_SystemType$ = GetSystemType
+set $INST_architecture$ = GetProductProperty("install_architecture","system specific")
+ 
+ 
+Set $LogDir$ = "%SystemDrive%\tmp"
+ 
+; ----------------------------------------------------------------
+; - Please edit the following values                             -
+; ----------------------------------------------------------------
+Set $ProductId$       = "vlc"
+Set $InstallDir$    = "%ProgramFiles32Dir%\VideoLAN\vlc\"
+Set $LicenseRequired$ = "false"
+Set $LicensePool$     = "p_" + $ProductId$
+Set $Uninst_Prg$        = "uninstall.exe"
+Set $Uninst_Cmd$        = ' /S'
+; ----------------------------------------------------------------
+ 
+comment "Show product picture"
+ShowBitmap "%ScriptPath%\" + "Vlc-icon.png" $ProductId$
+ 
+Message "Deinstalliere " + $ProductId$ + " ..."
+ 
+if FileExists("%ScriptPath%\vlc_delsub.ins")
+        comment "Start uninstall sub section"
+        Sub "%ScriptPath%\vlc_delsub.ins"
+endif
+ 
+if $LicenseRequired$ = "true"
+        comment "Licensing required, free license used"
+        Sub_free_license
+endif
+ 
+[Sub_free_license]
+comment "License management is enabled and will be used"
+ 
+comment "Trying to free license used for the product"
+DefVar $result$
+Set $result$ = FreeLicense($LicensePool$)
+; If there is an assignment of a license pool to the product, it is possible to use
+; Set $result$ = FreeLicense("", $ProductId$)
+;
+; If there is an assignment of a license pool to a windows software id, it is possible to use
+; DefVar $WindowsSoftwareId$
+; $WindowsSoftwareId$ = "..."
+; set $result$ = FreeLicense("", "", $WindowsSoftwareId$)
