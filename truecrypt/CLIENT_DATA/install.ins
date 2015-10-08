@@ -1,0 +1,356 @@
+; Copyright (c) uib gmbh (www.uib.de)
+; This sourcecode is owned by uib
+; and published under the Terms of the General Public License.
+; credits: http://www.opsi.org/credits/
+ 
+[Actions]
+requiredWinstVersion >= "4.11.2.6"
+ 
+DefVar $ProductId$
+DefVar $MinimumSpace$
+DefVar $NewExe$
+DefVar $InstallDir$
+DefVar $ExitCode$
+DefVar $Arch$
+ 
+set $ProductId$ = "truecrypt"
+set $MinimumSpace$ = "16 MB"
+; TC is 32Bit but installs to sysnative
+set $InstallDir$ = "%ProgramFilesSysnativeDir%\TrueCrypt"
+set $NewExe$ = $InstallDir$ + "\TrueCrypt.exe"
+set $Arch$ = GetSystemType
+ 
+ 
+if not(HasMinimumSpace ("%SYSTEMDRIVE%", $MinimumSpace$))
+	LogError "Not enough space on %SYSTEMDRIVE%: . "+$MinimumSpace$+" on Drive %SYSTEMDRIVE%: needed for "+$ProductId$+"."
+	isFatalError
+	; stop process and set installation status to failed
+else
+	comment "Show product picture"
+	ShowBitmap "%scriptpath%\"+$ProductId$+".png" "TrueCrypt"
+ 
+	if FileExists("%ScriptPath%\delsub.ins")
+		comment  "Start uninstall sub section"
+		sub "%ScriptPath%\delsub.ins"
+	endif
+ 
+	Message "Installing TrueCrypt ..."
+ 
+	comment "Copy files"
+	; to get the files: call setup and choose 'extract'
+	Files_install /Sysnative
+	if $Arch$ = "x86 System"
+		Files_install_32 /32bit
+	endif
+ 
+	if $Arch$ = "64 Bit System"
+		Files_install_64 /64bit
+		DosInAnIcon_rename winst /64bit
+		Registry_64 /64bit
+	endif
+ 
+	if GetMsVersionInfo < "6"
+		Registry_nt5
+		winbatch_regedit
+		Sub_check_exitcode
+		DosInAnIcon_setrights
+	endif
+ 
+	comment "uninstall entry is 32 bit"
+	Registry_tc_uninstall /32bit
+	Registry_32 /32bit
+	Registry_tc_base_sysnative /Sysnative
+	Registry_tc_base /32bit
+	Registry_tc_base /64bit
+ 
+	if GetMsVersionInfo < "6"
+		DosInAnIcon_removerights
+	endif
+ 
+	comment "Set start menu"
+	LinkFolder_install
+ 
+	comment "Set desktop icon"
+	LinkFolder_desktop
+ 
+	DosInAnIcon_start_service winst /sysnative
+ 
+	comment "Test for installation success"
+	if not(FileExists($NewExe$))
+		logError "Fatal: After Installation "+$NewExe$+" not found"
+		isFatalError
+	endif
+	ExitWindows /Reboot
+endif
+ 
+[Files_install]
+copy -s "%SCRIPTPATH%\files\*.*" "$InstallDir$"
+ 
+[Files_install_32]
+copy "%SCRIPTPATH%\files\truecrypt.sys" "%System%\drivers"
+ 
+[Files_install_64]
+del "%System%\drivers\truecrypt.sys"
+copy "%SCRIPTPATH%\files\truecrypt-x64.sys" "%System%\drivers"
+ 
+[DosInAnIcon_rename]
+cd %system%\drivers
+rename truecrypt-x64.sys truecrypt.sys
+ 
+[LinkFolder_install]
+set_basefolder common_programs
+set_subfolder TrueCrypt
+ 
+set_link
+  name: TrueCrypt
+  target: $NewExe$
+  parameters:
+  working_dir: $InstallDir$
+  icon_file:
+  icon_index:
+end_link
+ 
+set_link
+  name: TrueCrypt UserGuide
+  target: $InstallDir$\TrueCrypt User Guide.pdf
+  parameters:
+  working_dir: $InstallDir$
+  icon_file:
+  icon_index:
+end_link
+ 
+[LinkFolder_desktop]
+set_basefolder common_desktopdirectory
+set_subfolder ""
+ 
+set_link
+  name: TrueCrypt
+  target: $NewExe$
+  parameters:
+  working_dir: $InstallDir$
+  icon_file:
+  icon_index:
+end_link
+ 
+ 
+ 
+[DosInAnIcon_setrights]
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root" -ot reg -actn ace -ace "n:S-1-5-32-544;p:full;s:y" -actn clear -clr "dacl,sacl" -actn rstchldrn -rst "dacl,sacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT" -ot reg -actn ace -ace "n:S-1-5-32-544;p:full;s:y" -actn clear -clr "dacl,sacl" -actn rstchldrn -rst "dacl,sacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000" -ot reg -actn ace -ace "n:S-1-5-32-544;p:full;s:y" -actn clear -clr "dacl,sacl" -actn rstchldrn -rst "dacl,sacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000\Control" -ot reg -actn ace -ace "n:S-1-5-32-544;p:full;s:y" -actn clear -clr "dacl,sacl" -actn rstchldrn -rst "dacl,sacl"
+echo %ERRORLEVEL%
+exit %ERRORLEVEL%
+ 
+[DosInAnIcon_removerights]
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root" -ot reg -actn trustee -trst "n1:S-1-5-32-544;s1:y;ta:remtrst;w:dacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT" -ot reg -actn trustee -trst "n1:S-1-5-32-544;s1:y;ta:remtrst;w:dacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000" -ot reg -actn trustee -trst "n1:S-1-5-32-544;s1:y;ta:remtrst;w:dacl"
+"%scriptpath%\SetACL.exe" -on "HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000\Control" -ot reg -actn trustee -trst "n1:S-1-5-32-544;s1:y;ta:remtrst;w:dacl"
+echo %ERRORLEVEL%
+exit %ERRORLEVEL%
+ 
+ 
+[winbatch_regedit]
+"regedit.exe" /s "%scriptpath%\legacytc.reg"
+ 
+[Registry_tc_uninstall]
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\TrueCrypt]
+set "UninstallString"='"$InstallDir$\TrueCrypt Setup.exe" /u'
+set "ModifyPath"='"$InstallDir$\TrueCrypt Setup.exe" /c'
+set "DisplayIcon"='"$InstallDir$\TrueCrypt Setup.exe"'
+set "DisplayVersion"="7.1a"
+set "DisplayName"="TrueCrypt"
+set "Publisher"="TrueCrypt Foundation"
+set "URLInfoAbout"="http://www.truecrypt.org/"
+ 
+[Registry_tc_base_sysnative]
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCrypt]
+set ""="TrueCrypt class"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCrypt\CLSID]
+set ""="{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCrypt\CurVer]
+set ""="TrueCrypt.1"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCrypt.1]
+set ""="TrueCrypt class"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCrypt.1\CLSID]
+set ""="{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptFormat]
+set ""="TrueCryptFormat class"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptFormat\CLSID]
+set ""="{777DCDFD-C330-480B-B582-B02B57580CC9}"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptFormat\CurVer]
+set ""="TrueCryptFormat.1"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptFormat.1]
+set ""="TrueCryptFormat class"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptFormat.1\CLSID]
+set ""="{777DCDFD-C330-480B-B582-B02B57580CC9}"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptVolume]
+set ""="TrueCrypt Volume"
+set "AppUserModelID"="TrueCryptFoundation.TrueCrypt"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptVolume\DefaultIcon]
+set ""="$InstallDir$\TrueCrypt.exe,1"
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\TrueCryptVolume\Shell\open\command]
+set ""='"$InstallDir$\TrueCrypt.exe" /v "%1"'
+ 
+openkey [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.tc]
+set ""="TrueCryptVolume"
+ 
+openkey [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\truecrypt]
+set "Type"=reg_dword:00000001
+set "Start"=reg_dword:00000001
+set "ErrorControl"=reg_dword:00000001
+set "ImagePath"=Reg_Expand_SZ:"System32\drivers\truecrypt.sys"
+set "DisplayName"="truecrypt"
+ 
+openkey [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\truecrypt\Enum]
+set "0"="Root\LEGACY_TRUECRYPT\0000"
+set "Count"=reg_dword:00000001
+set "NextInstance"=reg_dword:00000001
+ 
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT]
+set "NextInstance"=reg_dword:00000001
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "Service"="truecrypt"
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "Legacy"=reg_dword:00000001
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "ConfigFlags"=reg_dword:0x00000000
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "Class"="LegacyDriver"
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "ClassGUID"="{8ECC055D-047F-11D1-A537-0000F8753ED1}"
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000]
+set "DeviceDesc"="truecrypt"
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000\Control]
+set "*NewlyCreated*"=reg_dword:0x00000000
+openkey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT\0000\Control]
+set "ActiveService"="truecrypt"
+ 
+ 
+[Registry_nt5]
+openkey [HKLM\SYSTEM\CurrentControlSet\Services\truecrypt\Security]
+set "Security"=reg_binary:01 00 14 80 90 00 00 00 9C 00 00 00 14 00 00 00 30 00 00 00 02 00 1C 00 01 00 00 00 02 80 14 00 FF 01 0F 00 01 01 00 00 00 00 00 01 00 00 00 00 02 00 60 00 04 00 00 00 00 00 14 00 FD 01 02 00 01 01 00 00 00 00 00 05 12 00 00 00 00 00 18 00 FF 01 0F 00 01 02 00 00 00 00 00 05 20 00 00 00 20 02 00 00 00 00 14 00 8D 01 02 00 01 01 00 00 00 00 00 05 0B 00 00 00 00 00 18 00 FD 01 02 00 01 02 00 00 00 00 00 05 20 00 00 00 23 02 00 00 01 01 00 00 00 00 00 05 12 00 00 00 01 01 00 00 00 00 00 05 12 00 00 00
+ 
+[Registry_64]
+openkey [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\truecrypt]
+set "WOW64"=reg_dword:00000001
+ 
+[Registry_tc_base]
+openkey [HKLM\SOFTWARE\Classes\AppID\TrueCrypt Format.exe]
+set "AppId"="{777DCDFD-C330-480B-B582-B02B57580CC9}"
+openkey [HKLM\SOFTWARE\Classes\AppID\TrueCrypt.exe]
+set "AppId"="{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}"
+openkey [HKLM\SOFTWARE\Classes\AppID\{777DCDFD-C330-480B-B582-B02B57580CC9}]
+set ""="TrueCryptFormat class"
+set "AccessPermission"=Reg_Binary:01 00 04 80 30 00 00 00 40 00 00 00 00 00 00 00 14 00 00 00 02 00 1C 00 01 00 00 00 00 00 14 00 07 00 00 00 01 01 00 00 00 00 00 05 04 00 00 00 01 02 00 00 00 00 00 05 20 00 00 00 20 02 00 00 01 02 00 00 00 00 00 05 20 00 00 00 20 02 00 00
+openkey [HKLM\SOFTWARE\Classes\AppID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}]
+set ""="TrueCrypt class"
+set "AccessPermission"=Reg_Binary:01 00 04 80 30 00 00 00 40 00 00 00 00 00 00 00 14 00 00 00 02 00 1C 00 01 00 00 00 00 00 14 00 07 00 00 00 01 01 00 00 00 00 00 05 04 00 00 00 01 02 00 00 00 00 00 05 20 00 00 00 20 02 00 00 01 02 00 00 00 00 00 05 20 00 00 00 20 02 00 00
+openkey [HKLM\SOFTWARE\Classes\Interface\{252C9DE6-D4B9-4A59-8A10-9CA73217B3D0}\TypeLib]
+set ""="{1770F56C-7881-4591-A179-79B8001C7D42}"
+set "Version"= "2.4"
+openkey [HKLM\SOFTWARE\Classes\Interface\{252C9DE6-D4B9-4A59-8A10-9CA73217B3D0}\ProxyStubClsid32]
+set ""="{00020424-0000-0000-C000-000000000046}"
+openkey [HKLM\SOFTWARE\Classes\Interface\{252C9DE6-D4B9-4A59-8A10-9CA73217B3D0}]
+set ""="ITrueCryptMainCom"
+openkey [HKLM\SOFTWARE\Classes\Interface\{9EE02955-174A-48F1-820C-022F327BE109}\TypeLib]
+set ""="{A7DF958C-0716-49E9-8C3E-53A775797576}"
+set "Version"= "2.4"
+openkey [HKLM\SOFTWARE\Classes\Interface\{9EE02955-174A-48F1-820C-022F327BE109}\ProxyStubClsid32]
+set ""="{00020424-0000-0000-C000-000000000046}"
+openkey [HKLM\SOFTWARE\Classes\Interface\{9EE02955-174A-48F1-820C-022F327BE109}]
+set ""="ITrueCryptFormatCom"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{1770F56C-7881-4591-A179-79B8001C7D42}\2.4\0\win32]
+set ""="$InstallDir$\TrueCrypt.exe"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{1770F56C-7881-4591-A179-79B8001C7D42}\2.4\HELPDIR]
+set "" = "$InstallDir$"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{1770F56C-7881-4591-A179-79B8001C7D42}\2.4\FLAGS]
+set ""="0"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{1770F56C-7881-4591-A179-79B8001C7D42}\2.4]
+set ""="TrueCrypt Main UAC Support Library"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{A7DF958C-0716-49E9-8C3E-53A775797576}\2.4\0\win32]
+set ""="$InstallDir$\TrueCrypt Format.exe"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{A7DF958C-0716-49E9-8C3E-53A775797576}\2.4\HELPDIR]
+set ""="$InstallDir$"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{A7DF958C-0716-49E9-8C3E-53A775797576}\2.4\FLAGS]
+set ""="0"
+openkey [HKLM\SOFTWARE\Classes\TypeLib\{A7DF958C-0716-49E9-8C3E-53A775797576}\2.4]
+set ""= "TrueCrypt Format UAC Support Library"
+ 
+[Registry_32]
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}\VersionIndependentProgID]
+set ""="TrueCryptFormat"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}\TypeLib]
+set ""="{A7DF958C-0716-49E9-8C3E-53A775797576}"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}\ProgID]
+set ""="TrueCryptFormat.1"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}\LocalServer32]
+set ""='"$InstallDir$\TrueCrypt Format.exe"'
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}\Elevation]
+set "Enabled"=Reg_Dword:0x00000001
+set "IconReference"="@$InstallDir$\TrueCrypt Format.exe,-501"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{777DCDFD-C330-480B-B582-B02B57580CC9}]
+set ""="TrueCryptFormat class"
+set "AppId"="{777DCDFD-C330-480B-B582-B02B57580CC9}"
+set "LocalizedString"="@$InstallDir$\TrueCrypt Format.exe,-112"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}\VersionIndependentProgID]
+set ""="TrueCrypt"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}\TypeLib]
+set ""="{1770F56C-7881-4591-A179-79B8001C7D42}"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}\ProgID]
+set ""="TrueCrypt.1"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}\LocalServer32]
+set ""='"$InstallDir$\TrueCrypt.exe"'
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}\Elevation]
+set "Enabled"=Reg_Dword:0x00000001
+set "IconReference"="@$InstallDir$\TrueCrypt.exe,-501"
+openkey [HKLM\SOFTWARE\Classes\CLSID\{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}]
+set ""="TrueCrypt class"
+set "AppId"="{CECBC0EE-78D9-41E6-BCF1-BC222BB224BA}"
+set "LocalizedString"="@$InstallDir$\TrueCrypt.exe,-110"
+ 
+[DosInAnIcon_start_service]
+net start truecrypt
+ 
+[Sub_check_exitcode]
+comment "Test for installation success via exit code"
+set $ExitCode$ = getLastExitCode
+; informations to exit codes see
+; http://msdn.microsoft.com/en-us/library/aa372835(VS.85).aspx
+; http://msdn.microsoft.com/en-us/library/aa368542.aspx
+if ($ExitCode$ = "0")
+	comment "Looks good: setup program gives exitcode zero"
+else
+	comment "Setup program gives a exitcode unequal zero: " + $ExitCode$
+	if ($ExitCode$ = "1605")
+		comment "ERROR_UNKNOWN_PRODUCT	1605	This action is only valid for products that are currently installed."
+		comment "Uninstall of a not installed product failed - no problem"
+	else
+		if ($ExitCode$ = "1641")
+			comment "looks good: setup program gives exitcode 1641"
+			comment "ERROR_SUCCESS_REBOOT_INITIATED	1641	The installer has initiated a restart. This message is indicative of a success."
+		else
+			if ($ExitCode$ = "3010")
+				comment "looks good: setup program gives exitcode 3010"
+				comment "ERROR_SUCCESS_REBOOT_REQUIRED	3010	A restart is required to complete the install. This message is indicative of a success."
+			else
+				logError "Fatal: Setup program gives an unknown exitcode unequal zero: " + $ExitCode$
+				isFatalError
+			endif
+		endif
+	endif
+endif
+

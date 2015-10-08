@@ -75,6 +75,8 @@ heise.de prophet.heise.de image allow
 heise.de vgwort.de * allow
 heise.de vgwort.de image allow
 mail.de mailcdn.de * allow
+notebooksbilliger.de rs.epoq.de * allow
+notebooksbilliger.de search.epoq.de * allow
 sicherheitstacho.de d3js.org script allow
 telekom.com * frame allow
 telekom.com dlvr.t-online.de * inherit

@@ -1,0 +1,45 @@
+[Package]
+version: 1
+depends: 
+incremental: False
+
+[Product]
+type: localboot
+id: truecrypt
+name: truecrypt
+description: TrueCrypt 7.1a (letzte Version)
+advice: TrueCrypt
+version: 7.1a
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: install.ins
+uninstallScript: uninstall.ins
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
