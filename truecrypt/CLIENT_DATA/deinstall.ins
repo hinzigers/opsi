@@ -1,0 +1,19 @@
+ [Initial]
+    Message=Deinstallation von TrueCrypt
+    LogLevel=2
+    ExitOnError=false
+    ScriptErrorMessages=true
+    TraceMode=off
+
+    [Aktionen]
+    Registry_KeyDelete
+	#Registry_KeyDelete /64bit
+
+    [Registry_KeyDelete]
+    DeleteKey [HKLM\SOFTWARE\Classes\.tc]
+    DeleteKey [HKLM\SOFTWARE\Classes\TrueCryptVolume]
+    DeleteKey [HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\TrueCrypt]
+    DeleteKey [HKLM\SYSTEM\ControlSet001\Enum\Root\LEGACY_TRUECRYPT]
+    DeleteKey [HKLM\SYSTEM\ControlSet001\Services\truecrypt]
+    DeleteKey [HKLM\SYSTEM\CurrentControlSet\Enum\Root\LEGACY_TRUECRYPT]
+    DeleteKey [HKLM\SYSTEM\CurrentControlSet\Services\truecrypt]
