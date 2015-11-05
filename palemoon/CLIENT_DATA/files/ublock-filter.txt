@@ -4,13 +4,11 @@
 ||hk
 ||sueddeustche.de
 ||suededutsche.de
-! Freitag, 25. September 2015 01:49:57 https://www.facebook.com/
 www.facebook.com###u_2_4 > ._50f4._p0k._4-i2 > ._2ph_ > ._50f4._3-96
-! Freitag, 25. September 2015 01:50:16 https://www.facebook.com/
 www.facebook.com###u_2_4 > ._50f4._p0k._4-i2 > ._2ph_ > ._3-8y.uiInputLabelLegacy.clearfix.uiInputLabel
-! Freitag, 25. September 2015 02:02:52 https://www.facebook.com/messages/SenaTor87
 www.facebook.com###u_9_4 > ._50f4._p0k._4-i2 > ._2ph_ > ._50f4._3-96
 ! Sonntag, 27. September 2015 04:22:05 http://ip-check.info/index.php
 ip-check.info###RevealerApplet
-! Sonntag, 27. September 2015 04:28:00 http://ip-check.info/index.php
 ||ip-check.info/files/flash009/AnonPrj.swf
+www.veeam.com###hp__container > .hp__mainSlider-container
+www.veeam.com###hp__container > .hp__secondSlider-container

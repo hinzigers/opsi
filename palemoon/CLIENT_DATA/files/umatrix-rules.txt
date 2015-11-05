@@ -87,6 +87,12 @@ twitch.tv api.swiftype.com script allow
 twitch.tv jtvnw.net plugin allow
 twitch.tv jtvnw.net script allow
 twitch.tv web-cdn.ttvnw.net script allow
+yahoo.com geo.yahoo.com image allow
+yahoo.com secure.adnxs.com * allow
+yahoo.com yahoo.com * allow
+yahoo.com yimg.com frame allow
+yahoo.com yimg.com script allow
+yahoo.com ymail.com frame allow
 youtube.com apis.google.com * allow
 youtube.com apis.google.com frame allow
 youtube.com googlevideo.com * allow
