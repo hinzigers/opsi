@@ -12,3 +12,78 @@ ip-check.info###RevealerApplet
 ||ip-check.info/files/flash009/AnonPrj.swf
 www.veeam.com###hp__container > .hp__mainSlider-container
 www.veeam.com###hp__container > .hp__secondSlider-container
+||cdn.flashtalking.com/51659/1192586/main.html
+www.bild.de###sas_3648_ibanner
+||ced.sascdn.com/diff/788/4826376/1er_sarahwinkhaus_04112015.jpg
+||bilder.bild.de/fotos/bild-mystery-41300556/Bild/2.bild.jpg
+www.bild.de###jsm_7 > .ad-mark.eyecatcher
+||www.1414.de/iframe?category_id=3953&height=280&width=658
+||bilder.bild.de/fotos/323x280-1414-ad2-mann-46845154-bild-41975366/Bild/1.bild.jpg
+www.bild.de###jsm_9 > .replace > .blank.tr > .adspecial993
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll35950936.module > .pos1.misc
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll35950936.module > .posLast.tx.hentry
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll35950936.module
+www.bild.de###jsm_10 > .ad-mark.eyecatcher
+||bilder.bild.de/fotos/aaa-wir-helfen-politiker-infos---185px-hoch_47648684-1441791502-42508386/Bild/1.bild.jpg
+www.bild.de###jsm_11 > .replace > .blank.tr > .adspecial993
+www.bild.de###jsm_11 > .replace > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(6) > div:nth-of-type(1) > .pagination
+||ced.sascdn.com/diff/251/4872170/200x954_BILdplus_Playboy.gif
+||ced.sascdn.com/diff/251/4872170/1017x120_BILdplus_Playboy.gif
+www.bild.de###ressortSuperBanner_1
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(7) > div:nth-of-type(1) > .pagination > .tll33805142.module > .misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###jsm_14 > .ad-mark.eyecatcher
+www.bild.de###jsm_8899
+||bilder.bild.de/fotos/ipad-air-2-und-iphone-6s-bestellen-42952466/Bild/2.bild.png
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(8) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll33805142.module > .misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(8) > .s15.content > section:nth-of-type(5) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+||bilder.bild.de/fotos/hier-leben-2000-menschen-unter-der-erde-48957321-43272510/Bild/2.bild.jpg
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(1) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(2) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###jsm_16 > .replace > .blank.tr
+www.bild.de###sas_3648_ibanner
+www.bild.de###jsm_4 > .ad-mark.rectangle
+www.bild.de###jsm_7 > .ad-mark.eyecatcher
+||bilder.bild.de/fotos/bild-mystery-41300556/Bild/2.bild.jpg
+||www.1414.de/iframe?category_id=3953&height=280&width=658
+||bilder.bild.de/fotos/323x280-1414-ad2-mann-46845154-bild-41975366/Bild/1.bild.jpg
+www.bild.de###jsm_9 > .replace > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll35950936.module
+www.bild.de###jsm_10 > .ad-mark.eyecatcher
+||bilder.bild.de/fotos/aaa-wir-helfen-politiker-infos---185px-hoch_47648684-1441791502-42508386/Bild/1.bild.jpg
+www.bild.de###jsm_11 > .replace > .blank.tr > .adspecial993
+www.bild.de###jsm_11 > .replace > .blank.tr
+www.bild.de###jsm_12 > .ad-mark.eyecatcher
+||ced.sascdn.com/diff/251/4872170/200x954_BILdplus_Playboy.gif
+www.bild.de###outbrain_widget_0 > .AR_6.ob_strip_container
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(7) > div:nth-of-type(1) > .pagination > .tll33805142.module > .misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###jsm_14 > .ad-mark.eyecatcher
+www.bild.de###jsm_79698
+||bilder.bild.de/fotos/ipad-air-2-und-iphone-6s-bestellen-42952466/Bild/2.bild.png
+www.bild.de###byouNews
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(10) > .s15.content > div:nth-of-type(1) > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(1) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry > .eyecatcher
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(12) > .s15.content > section > div:nth-of-type(1)
+www.bild.de###jsm_16 > .replace > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(2) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry
+www.bild.de##.cover
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(12) > .s15.content
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(2) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(11) > .s15.content > section:nth-of-type(1) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(10) > .s15.content > div:nth-of-type(1) > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(8) > .s15.content > section:nth-of-type(5) > div:nth-of-type(1) > .pagination > .sep.tll33206602.module > .sep.misc > .posLast.t5p2.portrait.hentry
+||bilder.bild.de/fotos/ipad-air-2-und-iphone-6s-bestellen-42952466/Bild/2.bild.png
+www.bild.de###jsm_63768
+||ced.sascdn.com/diff/251/4831842/48495303_bond_spectre_300x250_NEU.jpg
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(7) > div:nth-of-type(1) > .pagination > .tll33805142.module > .misc > .posLast.t5p2.portrait.hentry
+||ced.sascdn.com/diff/251/4872170/200x954_BILdplus_Playboy.gif
+www.bild.de###outbrain_widget_0 > .AR_6.ob_strip_container
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(6) > div:nth-of-type(1) > .pagination > .sep.tll33805142.module > .posLast.sep.misc
+www.bild.de###jsm_9 > .replace > .blank.tr
+www.bild.de###innerWrapper > .clearfix.faux:nth-of-type(7) > .s15.content > section:nth-of-type(4) > div:nth-of-type(1) > .pagination > .tll35950936.module
+||bilder.bild.de/fotos/bild-mystery-41300556/Bild/2.bild.jpg
+||ced.sascdn.com/diff/788/4826376/1er_alicabuchel_04112015.jpg
+www.bild.de###jsm_4 > .ad-mark.rectangle
+||bilder.bild.de/fotos/bild-mystery-41300556/Bild/2.bild.jpg
+www.google.de###cnso > .vk_c._Udi
+www.google.de###cnsh > ._eIg > ._tLg
